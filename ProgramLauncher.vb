@@ -145,21 +145,19 @@
         'lstPrograms.Sort(e.Column)
     End Sub
     
-    Private Sub ResizeByHeader(sender As Object, e As EventArgs) 'Handles contextCommandsResizePathHeader.Click, _
-            'contextCommandsResizeArgsHeader.Click, contextCommandsResizeArgHeader.Click
+    Private Sub ResizeByHeader(sender As Object, e As EventArgs) Handles contextCommandsResizePathHeader.Click, contextCommandsResizeArgsHeader.Click
         lstPrograms.AutoResizeColumn(sender.Tag, ColumnHeaderAutoResizeStyle.HeaderSize)
     End Sub
     
-    Private Sub ResizeByContent(sender As Object, e As EventArgs) 'Handles contextCommandsResizePathContent.Click, _
-            'contextCommandsResizeArgsContent.Click, contextCommandsResizeArgContent.Click
+    Private Sub ResizeByContent(sender As Object, e As EventArgs) Handles contextCommandsResizePathContent.Click, contextCommandsResizeArgsContent.Click
         lstPrograms.AutoResizeColumn(sender.Tag, ColumnHeaderAutoResizeStyle.ColumnContent)
     End Sub
     
-    Private Sub ResizeAllByHeader() 'Handles contextCommandsResizeAllHeader.Click
+    Private Sub ResizeAllByHeader() Handles contextCommandsResizeAllHeader.Click
         lstPrograms.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize)
     End Sub
     
-    Private Sub ResizeAllByContent() 'Handles contextCommandsResizeAllContent.Click
+    Private Sub ResizeAllByContent() Handles contextCommandsResizeAllContent.Click
         lstPrograms.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
     End Sub
     
