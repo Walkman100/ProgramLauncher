@@ -1,5 +1,4 @@
-﻿Imports System
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports System.Runtime.InteropServices
 
 ' General Information about an assembly is controlled through the following 
@@ -9,10 +8,10 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("ProgramLauncher")> 
-<Assembly: AssemblyDescription("ProgramLauncher")> 
-<Assembly: AssemblyCompany("DeavmiOSS")> 
+<Assembly: AssemblyDescription("A program that you start with an argument, that asks you which program you want to use")> 
+<Assembly: AssemblyCompany("WalkmanOSS")> 
 <Assembly: AssemblyProduct("ProgramLauncher")> 
-<Assembly: AssemblyCopyright("ProgramLauncher")> 
+<Assembly: AssemblyCopyright("FOSS from Walkman 2015")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
