@@ -2,6 +2,7 @@
     
     Dim isProgramEditor As Boolean
     Dim configFilePath As String = Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS\ProgramLauncher.xml"
+    Dim fullArgument As String = ""
     
     Public Sub New()
         If My.Application.CommandLineArgs.Count = 0 Then
@@ -14,11 +15,10 @@
             InitializeProgramSelectorComponents()
             
             'get CommandLineArgs and apply/run them
-            lblInstructions.Text = "Select a program to open """
             For Each s As String In My.Application.CommandLineArgs
-                lblInstructions.Text &= s
+                fullArgument &= s
             Next
-            lblInstructions.Text &= """ with:"
+            lblInstructions.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
     End Sub
     
@@ -58,17 +58,23 @@
     End Sub
     
     Private Sub btnEdit_Click() Handles btnEdit.Click
-        Dim inputBoxText As String
-        If lstPrograms.SelectedItems.Count > 1 Then
-            For Each item As ListViewItem In lstPrograms.SelectedItems
-                inputBoxText = InputBox("Enter the arguments to start """ & item.Text & """ with:", "", item.SubItems.Item(1).Text)
-                If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
-            Next
+        If isProgramEditor Then
+            Dim inputBoxText As String
+            If lstPrograms.SelectedItems.Count > 1 Then
+                For Each item As ListViewItem In lstPrograms.SelectedItems
+                    inputBoxText = InputBox("Enter the arguments to start """ & item.Text & """ with:", "", item.SubItems.Item(1).Text)
+                    If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
+                Next
+            Else
+                inputBoxText = InputBox("Enter the arguments to start """ & lstPrograms.FocusedItem.Text & """ with:", "", lstPrograms.FocusedItem.SubItems.Item(1).Text)
+                If inputBoxText <> "" Then lstPrograms.FocusedItem.SubItems.Item(1).Text = inputBoxText
+            End If
+            WriteConfig(configFilePath)
         Else
-            inputBoxText = InputBox("Enter the arguments to start """ & lstPrograms.FocusedItem.Text & """ with:", "", lstPrograms.FocusedItem.SubItems.Item(1).Text)
-            If inputBoxText <> "" Then lstPrograms.FocusedItem.SubItems.Item(1).Text = inputBoxText
+            Shell(Application.StartupPath & "\" & Process.GetCurrentProcess.ProcessName & ".exe", AppWinStyle.NormalFocus, True, 100000)
+            lstPrograms.Items.Clear()
+            ReadConfig(configFilePath)
         End If
-        'WriteConfig(configFilePath)
     End Sub
     
     Private Sub Browse() Handles btnBrowse.Click
@@ -85,7 +91,7 @@
                     
                 End If
             Next
-            'WriteConfig(configFilePath)
+            WriteConfig(configFilePath)
         Else
             openFileDialogBrowse.Title = "Select file to replace """ & lstPrograms.FocusedItem.Text & """ with:"
             If lstPrograms.FocusedItem.Text.Contains("\") Then
@@ -101,18 +107,27 @@
     End Sub
     
     Private Sub RunSelectedEntry() Handles btnRun.Click
-        If lstPrograms.SelectedItems.Count > 1 Then
-            For Each item As ListViewItem In lstPrograms.SelectedItems
-                RunProgram(item)
-            Next
+        If isProgramEditor Then
+            If lstPrograms.SelectedItems.Count > 1 Then
+                For Each item As ListViewItem In lstPrograms.SelectedItems
+                    RunProgram(item)
+                Next
+            Else
+                RunProgram(lstPrograms.FocusedItem)
+            End If
         Else
-            RunProgram(lstPrograms.FocusedItem)
+            RunProgram(lstPrograms.FocusedItem, fullArgument)
+            Application.Exit
         End If
     End Sub
     
-    Private Sub RunProgram(entry As ListViewItem, Optional argument As String = Nothing)
+    Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
         Try
-            Process.Start(entry.Text, entry.SubItems.Item(1).Text)
+            If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
+            Else
+                Process.Start(entry.Text, entry.SubItems.Item(1).Text & argument)
+            End If
         Catch ex As Exception
             Try
                 MsgBox("There was an error running the program """ & entry.Text & """ with """ & entry.SubItems.Item(1).Text & """ args!", MsgBoxStyle.Critical)
@@ -123,7 +138,7 @@
     End Sub
     
     Private Sub CloseProgramLauncher() Handles btnEnd.Click
-        WriteConfig(configFilePath)
+        If isProgramEditor Then WriteConfig(configFilePath)
         Application.Exit()
     End Sub
     
@@ -147,7 +162,7 @@
                 btnRun.Enabled = True
             End If
         End If
-        WriteConfig(configFilePath)
+        If isProgramEditor Then WriteConfig(configFilePath)
     End Sub
     
     Private Sub lstPrograms_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles lstPrograms.ColumnClick

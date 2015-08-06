@@ -45,6 +45,7 @@
         Me.lstPrograms.HideSelection = false
         Me.lstPrograms.LabelEdit = true
         Me.lstPrograms.Location = New System.Drawing.Point(12, 25)
+        Me.lstPrograms.MultiSelect = false
         Me.lstPrograms.Size = New System.Drawing.Size(445, 126)
         Me.lstPrograms.UseCompatibleStateImageBehavior = false
         Me.lstPrograms.View = System.Windows.Forms.View.Details
