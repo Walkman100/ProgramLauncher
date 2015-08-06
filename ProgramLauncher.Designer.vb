@@ -31,7 +31,7 @@ Partial Class ProgramLauncher
         Me.lstPrograms = New System.Windows.Forms.ListView()
         Me.colheadPath = New System.Windows.Forms.ColumnHeader()
         Me.colheadProgramArgs = New System.Windows.Forms.ColumnHeader()
-        Me.browseProgram = New System.Windows.Forms.OpenFileDialog()
+        Me.openFileDialogBrowse = New System.Windows.Forms.OpenFileDialog()
         Me.lblInstructions = New System.Windows.Forms.Label()
         Me.SuspendLayout
         '
@@ -127,13 +127,12 @@ Partial Class ProgramLauncher
         Me.colheadProgramArgs.Text = "Program Arguments"
         Me.colheadProgramArgs.Width = 202
         '
-        'browseProgram
+        'openFileDialogBrowse
         '
-        Me.browseProgram.DefaultExt = "exe"
-        Me.browseProgram.FileName = "openFileDialog1"
-        Me.browseProgram.Filter = "Executables|*.exe; *.bat; *.com; *.vbs; *.cpl|All files|*.*"
-        Me.browseProgram.ReadOnlyChecked = true
-        Me.browseProgram.Title = "Select a program"
+        Me.openFileDialogBrowse.DefaultExt = "exe"
+        Me.openFileDialogBrowse.Filter = "Executables|*.exe; *.bat; *.com; *.vbs; *.cpl|All files|*.*"
+        Me.openFileDialogBrowse.ReadOnlyChecked = true
+        Me.openFileDialogBrowse.Title = "Select a program"
         '
         'lblInstructions
         '
@@ -165,15 +164,15 @@ Partial Class ProgramLauncher
         Me.PerformLayout
     End Sub
     Private lblInstructions As System.Windows.Forms.Label
-    Private browseProgram As System.Windows.Forms.OpenFileDialog
+    Private openFileDialogBrowse As System.Windows.Forms.OpenFileDialog
     Private colheadProgramArgs As System.Windows.Forms.ColumnHeader
     Private colheadPath As System.Windows.Forms.ColumnHeader
-    Private lstPrograms As System.Windows.Forms.ListView
-    Private btnEnd As System.Windows.Forms.Button
-    Private btnAdd As System.Windows.Forms.Button
-    Private btnBrowse As System.Windows.Forms.Button
-    Private btnRemove As System.Windows.Forms.Button
-    Private btnEdit As System.Windows.Forms.Button
-    Private btnRun As System.Windows.Forms.Button
+    Private WithEvents lstPrograms As System.Windows.Forms.ListView
+    Private WithEvents btnEnd As System.Windows.Forms.Button
+    Private WithEvents btnAdd As System.Windows.Forms.Button
+    Private WithEvents btnBrowse As System.Windows.Forms.Button
+    Private WithEvents btnRemove As System.Windows.Forms.Button
+    Private WithEvents btnEdit As System.Windows.Forms.Button
+    Private WithEvents btnRun As System.Windows.Forms.Button
 
 End Class
