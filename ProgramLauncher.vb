@@ -2,6 +2,21 @@
     
     Dim configFilePath As String = Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS\ProgramLauncher.xml"
     
+    Public Sub New()
+        If My.Application.CommandLineArgs.Count = 0 Then
+            InitializeComponent()
+        Else
+            'InitializeProgramSelectorCompenents()
+            
+            'get CommandLineArgs and apply/run them
+            lblInstructions.Text = "Select a program to open """
+            For Each s As String In My.Application.CommandLineArgs
+                lblInstructions.Text &= s
+            Next
+            lblInstructions.Text &= """ with:"
+        End If
+    End Sub
+    
     Private Sub LoadProgramLauncher() Handles Me.Load
         openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
         
@@ -19,19 +34,6 @@
             ReadConfig(configFilePath)
         End If
         
-        If My.Application.CommandLineArgs.Count = 0 Then
-            'InitializeComponent()
-        Else
-            'InitializeProgramSelectorComponents()
-        End If
-        'get CommandLineArgs and apply/run them
-        For Each s As String In My.Application.CommandLineArgs
-            If s.ToLower = "hidegui" Then
-                Me.WindowState = FormWindowState.Minimized
-            Else
-                
-            End If
-        Next
         CheckButtons
     End Sub
     
