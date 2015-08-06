@@ -1,12 +1,17 @@
 ﻿Public Class ProgramLauncher
     
+    Dim isProgramEditor As Boolean
     Dim configFilePath As String = Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS\ProgramLauncher.xml"
     
     Public Sub New()
         If My.Application.CommandLineArgs.Count = 0 Then
+            isProgramEditor = True
             InitializeComponent()
+            
+            openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
         Else
-            'InitializeProgramSelectorCompenents()
+            isProgramEditor = False
+            InitializeProgramSelectorComponents()
             
             'get CommandLineArgs and apply/run them
             lblInstructions.Text = "Select a program to open """
@@ -18,8 +23,6 @@
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
-        openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
-        
         If Not Directory.Exists(Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS") Then
             Directory.CreateDirectory(Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS")
         End If
@@ -126,15 +129,23 @@
     
     Private Sub CheckButtons() Handles lstPrograms.Click, lstPrograms.SelectedIndexChanged, lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
         If IsNothing(lstPrograms.FocusedItem) Then
-            btnRemove.Enabled = False
-            btnEdit.Enabled = False
-            btnBrowse.Enabled = False
-            btnRun.Enabled = False
+            If isProgramEditor Then
+                btnRemove.Enabled = False
+                btnEdit.Enabled = False
+                btnBrowse.Enabled = False
+                btnRun.Enabled = False
+            Else
+                btnRun.Enabled = False
+            End If
         Else
-            btnRemove.Enabled = True
-            btnEdit.Enabled = True
-            btnBrowse.Enabled = True
-            btnRun.Enabled = True
+            If isProgramEditor Then
+                btnRemove.Enabled = True
+                btnEdit.Enabled = True
+                btnBrowse.Enabled = True
+                btnRun.Enabled = True
+            Else
+                btnRun.Enabled = True
+            End If
         End If
         WriteConfig(configFilePath)
     End Sub
