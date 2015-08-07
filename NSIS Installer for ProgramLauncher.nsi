@@ -50,12 +50,22 @@ Section "Quick Launch Shortcut"
   CreateShortCut "$QUICKLAUNCH\ProgramLauncher.lnk" "$INSTDIR\ProgramLauncher.exe" "" "$INSTDIR\ProgramLauncher.exe" "" "" "" "ProgramLauncher"
 SectionEnd
 
-Section "Add ProgramLauncher to context menu"
-  ; File item
-  WriteRegStr HKCR "*\shell\ProgramLauncher" "" "Properties..."
-  WriteRegStr HKCR "*\shell\ProgramLauncher" "Icon" "$INSTDIR\ProgramLauncher.exe"
-  WriteRegStr HKCR "*\shell\ProgramLauncher\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
-SectionEnd
+SubSection "Shell integration"
+  Section "Set as default HTTP and HTTPS handler"
+    WriteRegStr HKCR "http\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCR "https\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKLM "SOFTWARE\Classes\http\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKLM "SOFTWARE\Classes\https\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCU "Software\Classes\http\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCU "Software\Classes\https\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+  SectionEnd
+  
+  Section "Add to context menu for all files"
+    WriteRegStr HKCR "*\shell\ProgramLauncher" "" "ProgramLauncher..."
+      WriteRegStr HKCR "*\shell\ProgramLauncher" "Icon" "$INSTDIR\ProgramLauncher.exe"
+      WriteRegStr HKCR "*\shell\ProgramLauncher\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+  SectionEnd
+SubSectionEnd
 
 ; Functions
 
@@ -75,6 +85,7 @@ FunctionEnd
 
 ; Uninstaller
 
+!include LogicLib.nsh ; For ${IF} logic
 Section "Uninstall"
   Delete "$INSTDIR\ProgramLauncher-Uninst.exe" ; Remove Application Files
   Delete "$INSTDIR\ProgramLauncher.exe"
@@ -87,7 +98,38 @@ Section "Uninstall"
   Delete "$DESKTOP\ProgramLauncher.lnk"     ; Remove Desktop      Shortcut
   Delete "$QUICKLAUNCH\ProgramLauncher.lnk" ; Remove Quick Launch Shortcut
   
-  DeleteRegKey HKCR "*\shell\ProgramLauncher" ; Remove files context menu item
+  ; Remove HTTP/HTTPS handlers if they are still set to ProgramLauncher:
+  ReadRegStr $0 HKCR "http\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCR "http\shell\open\command" "" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKCR "https\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCR "https\shell\open\command" "" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKLM "SOFTWARE\Classes\http\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKLM "SOFTWARE\Classes\http\shell\open\command" "" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKLM "SOFTWARE\Classes\https\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKLM "SOFTWARE\Classes\https\shell\open\command" "" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKCU "Software\Classes\http\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCU "Software\Classes\http\shell\open\command" "" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKCU "Software\Classes\https\shell\open\command" ""
+  ${IF} $0 == "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    WriteRegStr HKCU "Software\Classes\https\shell\open\command" "" ""
+  ${ENDIF}
+  
+  DeleteRegKey HKCR "*\shell\ProgramLauncher" ; Remove context menu item
 SectionEnd
 
 ; Uninstaller Functions
