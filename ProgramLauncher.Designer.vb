@@ -260,5 +260,6 @@
     Private WithEvents btnBrowse As System.Windows.Forms.Button
     Private WithEvents btnRemove As System.Windows.Forms.Button
     Private WithEvents btnEdit As System.Windows.Forms.Button
+    Private WithEvents btnOpenOnly As System.Windows.Forms.Button
     Private WithEvents btnRun As System.Windows.Forms.Button
 End Class
