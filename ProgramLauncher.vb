@@ -106,7 +106,7 @@
         End If
     End Sub
     
-    Private Sub RunSelectedEntry() Handles btnRun.Click
+    Private Sub RunSelectedEntry(sender As Object, e As EventArgs) Handles btnRun.Click, btnOpenOnly.Click
         If isProgramEditor Then
             If lstPrograms.SelectedItems.Count > 1 Then
                 For Each item As ListViewItem In lstPrograms.SelectedItems
@@ -117,7 +117,7 @@
             End If
         Else
             RunProgram(lstPrograms.FocusedItem, fullArgument)
-            Application.Exit
+            If sender.Equals(btnRun) Then Application.Exit
         End If
     End Sub
     
@@ -151,6 +151,7 @@
                 btnRun.Enabled = False
             Else
                 btnRun.Enabled = False
+                btnOpenOnly.Enabled = False
             End If
         Else
             If isProgramEditor Then
@@ -160,6 +161,7 @@
                 btnRun.Enabled = True
             Else
                 btnRun.Enabled = True
+                btnOpenOnly.Enabled = True
             End If
         End If
         If isProgramEditor Then WriteConfig(configFilePath)

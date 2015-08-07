@@ -35,8 +35,6 @@
         Me.btnEnd.Text = "Cancel"
         Me.btnEnd.UseVisualStyleBackColor = true
         'lstPrograms
-        Me.lstPrograms.AllowColumnReorder = true
-        Me.lstPrograms.AllowDrop = true
         Me.lstPrograms.Anchor = _
           CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) Or _
             System.Windows.Forms.AnchorStyles.Left) Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
@@ -44,7 +42,6 @@
         Me.lstPrograms.FullRowSelect = true
         Me.lstPrograms.GridLines = true
         Me.lstPrograms.HideSelection = false
-        Me.lstPrograms.LabelEdit = true
         Me.lstPrograms.Location = New System.Drawing.Point(12, 25)
         Me.lstPrograms.MultiSelect = false
         Me.lstPrograms.Size = New System.Drawing.Size(448, 155)
