@@ -5,6 +5,7 @@
 ;Icon "My Project\document-properties.ico"
 Caption "ProgramLauncher Installer"
 Name "ProgramLauncher"
+XPStyle on
 AutoCloseWindow true
 ShowInstDetails show
 
