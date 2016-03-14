@@ -59,11 +59,24 @@ SubSection "Shell integration"
     WriteRegStr HKLM "SOFTWARE\Classes\https\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
     WriteRegStr HKCU "Software\Classes\http\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
     WriteRegStr HKCU "Software\Classes\https\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+    
+    ; Actual default browser (WinVista and up), thanks to
+    ; https://newoldthing.wordpress.com/2007/03/23/how-does-your-browsers-know-that-its-not-the-default-browser/
+    WriteRegStr HKCR "ProgramLauncherURL" "" "ProgramLauncher URL"
+    WriteRegStr HKCR "ProgramLauncherURL" "FriendlyTypeName" "ProgramLauncher URL"
+    WriteRegStr HKCR "ProgramLauncherURL" "Url Protocol" ""
+      WriteRegStr HKCR "ProgramLauncherURL\DefaultIcon" "" "$INSTDIR\ProgramLauncher.exe"
+      WriteRegStr HKCR "ProgramLauncherURL\shell" "" "open"
+        WriteRegStr HKCR "ProgramLauncherURL\shell\open\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
+        WriteRegStr HKCR "ProgramLauncherURL\shell\open\ddeexec" "" ""
+    ; Now we have a custom ProgID, set it as default
+    WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" "Progid" "ProgramLauncherURL"
+    WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" "Progid" "ProgramLauncherURL"
   SectionEnd
   
   Section "Add to context menu for all files"
     WriteRegStr HKCR "*\shell\ProgramLauncher" "" "ProgramLauncher..."
-      WriteRegStr HKCR "*\shell\ProgramLauncher" "Icon" "$INSTDIR\ProgramLauncher.exe"
+    WriteRegStr HKCR "*\shell\ProgramLauncher" "Icon" "$INSTDIR\ProgramLauncher.exe"
       WriteRegStr HKCR "*\shell\ProgramLauncher\command" "" "$\"$INSTDIR\ProgramLauncher.exe$\" $\"%1$\""
   SectionEnd
 SubSectionEnd
@@ -130,6 +143,17 @@ Section "Uninstall"
     WriteRegStr HKCU "Software\Classes\https\shell\open\command" "" ""
   ${ENDIF}
   
+  ReadRegStr $0 HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" "Progid"
+  ${IF} $0 == "ProgramLauncherURL"
+    WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" "Progid" ""
+  ${ENDIF}
+  
+  ReadRegStr $0 HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" "Progid"
+  ${IF} $0 == "ProgramLauncherURL"
+    WriteRegStr HKCU "Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice" "Progid" ""
+  ${ENDIF}
+  
+  DeleteRegKey HKCR "ProgramLauncherURL" ; Remove WinVista and up default browser ProgID entry
   DeleteRegKey HKCR "*\shell\ProgramLauncher" ; Remove context menu item
 SectionEnd
 
