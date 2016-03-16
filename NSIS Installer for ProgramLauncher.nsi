@@ -2,7 +2,7 @@
 ; get NSIS at http://nsis.sourceforge.net/Download
 ; As a program that all Power PC users should have, Notepad++ is recommended to edit this file
 
-;Icon "My Project\document-properties.ico"
+Icon "My Project\1458111143_open.ico"
 Caption "ProgramLauncher Installer"
 Name "ProgramLauncher"
 XPStyle on

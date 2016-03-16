@@ -69,6 +69,7 @@
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnEnd)
         Me.Controls.Add(Me.lstPrograms)
+        Me.Icon = Global.ProgramLauncher.My.Resources.Resources._1458111143_open
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Select a Program"
         Me.ResumeLayout(false)
