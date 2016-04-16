@@ -13,6 +13,7 @@
         Me.lblInstructions.AutoSize = true
         Me.lblInstructions.Location = New System.Drawing.Point(12, 9)
         Me.lblInstructions.Size = New System.Drawing.Size(164, 13)
+        Me.lblInstructions.UseMnemonic = false
         Me.lblInstructions.Text = "Select a program to open """" with:"
         'btnRun
         Me.btnRun.Anchor = System.Windows.Forms.AnchorStyles.Bottom
