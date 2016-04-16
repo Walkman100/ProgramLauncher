@@ -88,7 +88,6 @@
                 End If
                 If openFileDialogBrowse.ShowDialog() = DialogResult.OK Then
                     item.Text = openFileDialogBrowse.FileName
-                    
                 End If
             Next
             WriteConfig(configFilePath)
@@ -117,7 +116,13 @@
             End If
         Else
             RunProgram(lstPrograms.FocusedItem, fullArgument)
-            If sender.Equals(btnRun) Then Application.Exit
+            If sender.Equals(btnRun) Then CloseProgramLauncher
+        End If
+    End Sub
+    
+    Sub lstPrograms_DoubleClick() Handles lstPrograms.DoubleClick
+        If lstPrograms.SelectedItems.Count > 0 Then
+            RunSelectedEntry(btnRun, New System.Windows.Forms.MouseEventArgs(MouseButtons.Left,2,0,0,0))
         End If
     End Sub
     
