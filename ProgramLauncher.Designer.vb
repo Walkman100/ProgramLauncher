@@ -217,16 +217,15 @@
         Me.lblInstructions.AutoSize = true
         Me.lblInstructions.Location = New System.Drawing.Point(12, 170)
         Me.lblInstructions.Name = "lblInstructions"
-        Me.lblInstructions.Size = New System.Drawing.Size(197, 13)
+        Me.lblInstructions.Size = New System.Drawing.Size(450, 13)
         Me.lblInstructions.TabIndex = 41
-        Me.lblInstructions.Text = """{0}"" Will be replaced with the argument"
+        Me.lblInstructions.Text = """{0}"" Will be replaced with the argument. You can use ""Copy to Clipboard"" as a program path."
         '
         'ProgramLauncher
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(539, 192)
-        Me.Controls.Add(Me.lblInstructions)
         Me.Controls.Add(Me.btnRun)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnRemove)
@@ -234,6 +233,7 @@
         Me.Controls.Add(Me.btnAdd)
         Me.Controls.Add(Me.btnEnd)
         Me.Controls.Add(Me.lstPrograms)
+        Me.Controls.Add(Me.lblInstructions)
         Me.Icon = Global.ProgramLauncher.My.Resources.Resources._1458111143_open
         Me.Name = "ProgramLauncher"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

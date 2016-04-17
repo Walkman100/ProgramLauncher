@@ -128,6 +128,10 @@
     End Sub
     
     Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
+        If entry.Text = "Copy to Clipboard" Then
+            Clipboard.SetText(argument, TextDataFormat.UnicodeText)
+            Exit Sub
+        End If
         Try
             If entry.SubItems.Item(1).Text.Contains("{0}") Then
                 Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
