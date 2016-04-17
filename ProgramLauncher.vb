@@ -41,8 +41,9 @@
     End Sub
     
     Private Sub AddItem() Handles btnAdd.Click
-        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", " "})
+        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
         lstPrograms.FocusedItem = lstPrograms.Items.Add(tmpListViewItem)
+        Browse()
         CheckButtons
     End Sub
     
@@ -194,7 +195,7 @@
         lstPrograms.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
     End Sub
     
-    Private Sub lstCommands_DragEnter(sender As Object, e As DragEventArgs) Handles lstPrograms.DragEnter
+    Private Sub lstPrograms_DragEnter(sender As Object, e As DragEventArgs) Handles lstPrograms.DragEnter
         If e.Data.GetDataPresent(DataFormats.Text) Or e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.All
         Else
@@ -202,7 +203,7 @@
         End If
     End Sub
     
-    Private Sub lstCommands_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
+    Private Sub lstPrograms_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
         If e.Data.GetDataPresent(DataFormats.Text) Then
             Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " ", "draggedFile"})
             lstPrograms.FocusedItem = lstPrograms.Items.Add(tmpListViewItem)
