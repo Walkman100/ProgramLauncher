@@ -232,20 +232,21 @@
             Exit Sub
         End Try
         
+        Dim elementAttribute As String
         If reader.IsStartElement() AndAlso reader.Name = "ProgramLauncher" Then
             If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ProgramList" Then
                 While reader.IsStartElement
                     If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Program" Then
-                        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", " "})
+                        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{}"""})
                         
-                        Dim attribute As String = reader("path")
-                        If attribute IsNot Nothing Then
-                            tmpListViewItem.Text = attribute
+                        elementAttribute = reader("path")
+                        If elementAttribute IsNot Nothing Then
+                            tmpListViewItem.Text = elementAttribute
                         End If
                         
-                        attribute = reader("args")
-                        If attribute IsNot Nothing Then
-                            tmpListViewItem.SubItems.Item(1).Text = attribute
+                        elementAttribute = reader("args")
+                        If elementAttribute IsNot Nothing Then
+                            tmpListViewItem.SubItems.Item(1).Text = elementAttribute
                         End If
                         
                         lstPrograms.Items.Add(tmpListViewItem)
@@ -254,32 +255,42 @@
             End If
             If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Settings" Then
                 If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ColumnSettings" Then
-                    Dim attribute As String
                     While reader.IsStartElement
                         If reader.Read AndAlso reader.IsStartElement() Then
                             If reader.Name = "PathColumn" Then
-                                attribute = reader("index")
-                                If attribute IsNot Nothing Then
-                                    colheadPath.DisplayIndex = attribute
+                                elementAttribute = reader("index")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadPath.DisplayIndex = elementAttribute
                                 End If
                                 
-                                attribute = reader("width")
-                                If attribute IsNot Nothing Then
-                                    colheadPath.Width = attribute
+                                elementAttribute = reader("width")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadPath.Width = elementAttribute
                                 End If
                             ElseIf reader.Name = "ArgColumn"
-                                attribute = reader("index")
-                                If attribute IsNot Nothing Then
-                                    colheadProgramArgs.DisplayIndex = attribute
+                                elementAttribute = reader("index")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadProgramArgs.DisplayIndex = elementAttribute
                                 End If
                                 
-                                attribute = reader("width")
-                                If attribute IsNot Nothing Then
-                                    colheadProgramArgs.Width = attribute
+                                elementAttribute = reader("width")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadProgramArgs.Width = elementAttribute
                                 End If
                             End If
                         End If
                     End While
+                End If
+                If reader.Read AndAlso reader.IsStartElement AndAlso reader.Name = "WindowSize" Then
+                    elementAttribute = reader("width")
+                    If elementAttribute IsNot Nothing Then
+                        Me.Width = elementAttribute
+                    End If
+                    
+                    elementAttribute = reader("height")
+                    If elementAttribute IsNot Nothing Then
+                        Me.Height = elementAttribute
+                    End If
                 End If
             End If
         End If
@@ -314,6 +325,10 @@
                     writer.WriteAttributeString("index", colheadProgramArgs.DisplayIndex)
                     writer.WriteAttributeString("width", colheadProgramArgs.Width)
                 writer.WriteEndElement()
+            writer.WriteEndElement()
+            writer.WriteStartElement("WindowSize")
+                writer.WriteAttributeString("width", Me.Width)
+                writer.WriteAttributeString("height", Me.Height)
             writer.WriteEndElement()
         writer.WriteEndElement()
         
