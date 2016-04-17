@@ -284,12 +284,20 @@
                 If reader.Read AndAlso reader.IsStartElement AndAlso reader.Name = "WindowSize" Then
                     elementAttribute = reader("width")
                     If elementAttribute IsNot Nothing Then
-                        Me.Width = elementAttribute
+                        If isProgramEditor Then
+                            Me.Width = elementAttribute
+                        Else
+                            Me.Width = elementAttribute -67
+                        End If
                     End If
                     
                     elementAttribute = reader("height")
                     If elementAttribute IsNot Nothing Then
-                        Me.Height = elementAttribute
+                        If isProgramEditor Then
+                            Me.Height = elementAttribute
+                        Else
+                            Me.Height = elementAttribute +29
+                        End If
                     End If
                 End If
             End If
