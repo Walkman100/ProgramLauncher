@@ -1,4 +1,4 @@
-﻿Public Class ProgramLauncher
+Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
     Dim configFilePath As String = Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS\ProgramLauncher.xml"

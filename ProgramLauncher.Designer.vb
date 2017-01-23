@@ -1,4 +1,4 @@
-﻿Partial Class ProgramLauncher
+Partial Class ProgramLauncher
     Inherits System.Windows.Forms.Form
     
     ''' <summary>

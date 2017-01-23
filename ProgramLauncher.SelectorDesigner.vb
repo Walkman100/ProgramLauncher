@@ -1,4 +1,4 @@
-﻿Partial Class ProgramLauncher
+Partial Class ProgramLauncher
     Private Sub InitializeProgramSelectorComponents()
         Me.lblInstructions = New System.Windows.Forms.Label()
         Me.btnRun = New System.Windows.Forms.Button()
