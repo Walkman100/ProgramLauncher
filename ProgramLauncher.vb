@@ -1,3 +1,4 @@
+Imports System.Security.Principal
 Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
@@ -10,6 +11,10 @@ Public Class ProgramLauncher
             InitializeComponent()
             
             openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
+            
+            If New WindowsPrincipal(WindowsIdentity.GetCurrent).IsInRole(WindowsBuiltInRole.Administrator) Then _
+                Me.Text = "[Admin] Edit ProgramLauncher Programs" Else _
+                Me.Text = "Edit ProgramLauncher Programs"
         Else
             isProgramEditor = False
             InitializeProgramSelectorComponents()
@@ -19,6 +24,10 @@ Public Class ProgramLauncher
                 fullArgument &= s
             Next
             lblInstructions.Text = "Select a program to open """ & fullArgument & """ with:"
+            
+            If New WindowsPrincipal(WindowsIdentity.GetCurrent).IsInRole(WindowsBuiltInRole.Administrator) Then _
+                Me.Text = "[Admin] Select a program to open """ & fullArgument & """ with:" Else _
+                Me.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
     End Sub
     
