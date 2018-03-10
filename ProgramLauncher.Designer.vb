@@ -55,7 +55,7 @@ Partial Class ProgramLauncher
         Me.btnRun.Location = New System.Drawing.Point(466, 128)
         Me.btnRun.Name = "btnRun"
         Me.btnRun.Size = New System.Drawing.Size(61, 23)
-        Me.btnRun.TabIndex = 39
+        Me.btnRun.TabIndex = 5
         Me.btnRun.Text = "Run"
         Me.btnRun.UseVisualStyleBackColor = true
         '
@@ -65,7 +65,7 @@ Partial Class ProgramLauncher
         Me.btnEdit.Location = New System.Drawing.Point(466, 70)
         Me.btnEdit.Name = "btnEdit"
         Me.btnEdit.Size = New System.Drawing.Size(61, 23)
-        Me.btnEdit.TabIndex = 40
+        Me.btnEdit.TabIndex = 3
         Me.btnEdit.Text = "Edit"
         Me.btnEdit.UseVisualStyleBackColor = true
         '
@@ -75,29 +75,28 @@ Partial Class ProgramLauncher
         Me.btnRemove.Location = New System.Drawing.Point(466, 41)
         Me.btnRemove.Name = "btnRemove"
         Me.btnRemove.Size = New System.Drawing.Size(61, 23)
-        Me.btnRemove.TabIndex = 38
+        Me.btnRemove.TabIndex = 2
         Me.btnRemove.Text = "Remove"
         Me.btnRemove.UseVisualStyleBackColor = true
         '
         'btnBrowse
         '
         Me.btnBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.btnBrowse.Location = New System.Drawing.Point(466, 99)
         Me.btnBrowse.Name = "btnBrowse"
         Me.btnBrowse.Size = New System.Drawing.Size(61, 23)
-        Me.btnBrowse.TabIndex = 37
+        Me.btnBrowse.TabIndex = 4
         Me.btnBrowse.Text = "Browse..."
         Me.btnBrowse.UseVisualStyleBackColor = true
         '
         'btnAdd
         '
         Me.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnAdd.Location = New System.Drawing.Point(466, 12)
         Me.btnAdd.Name = "btnAdd"
         Me.btnAdd.Size = New System.Drawing.Size(61, 23)
-        Me.btnAdd.TabIndex = 36
+        Me.btnAdd.TabIndex = 1
         Me.btnAdd.Text = "Add"
         Me.btnAdd.UseVisualStyleBackColor = true
         '
@@ -108,7 +107,7 @@ Partial Class ProgramLauncher
         Me.btnEnd.Location = New System.Drawing.Point(466, 157)
         Me.btnEnd.Name = "btnEnd"
         Me.btnEnd.Size = New System.Drawing.Size(61, 23)
-        Me.btnEnd.TabIndex = 35
+        Me.btnEnd.TabIndex = 6
         Me.btnEnd.Text = "Exit"
         Me.btnEnd.UseVisualStyleBackColor = true
         '
@@ -128,7 +127,7 @@ Partial Class ProgramLauncher
         Me.lstPrograms.Location = New System.Drawing.Point(12, 12)
         Me.lstPrograms.Name = "lstPrograms"
         Me.lstPrograms.Size = New System.Drawing.Size(448, 155)
-        Me.lstPrograms.TabIndex = 34
+        Me.lstPrograms.TabIndex = 0
         Me.lstPrograms.UseCompatibleStateImageBehavior = false
         Me.lstPrograms.View = System.Windows.Forms.View.Details
         '
@@ -218,13 +217,15 @@ Partial Class ProgramLauncher
         Me.lblInstructions.Location = New System.Drawing.Point(12, 170)
         Me.lblInstructions.Name = "lblInstructions"
         Me.lblInstructions.Size = New System.Drawing.Size(450, 13)
-        Me.lblInstructions.TabIndex = 41
+        Me.lblInstructions.TabIndex = 7
         Me.lblInstructions.Text = """{0}"" Will be replaced with the argument. You can use ""Copy to Clipboard"" as a program path."
         '
         'ProgramLauncher
         '
+        Me.AcceptButton = Me.btnBrowse
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btnEnd
         Me.ClientSize = New System.Drawing.Size(539, 192)
         Me.Controls.Add(Me.btnRun)
         Me.Controls.Add(Me.btnEdit)
