@@ -1,4 +1,3 @@
-Imports System.Security.Principal
 Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
@@ -13,7 +12,7 @@ Public Class ProgramLauncher
             
             openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
             
-            If New WindowsPrincipal(WindowsIdentity.GetCurrent).IsInRole(WindowsBuiltInRole.Administrator) Then _
+            If WalkmanLib.IsAdmin Then _
                 Me.Text = "[Admin] Edit ProgramLauncher Programs" Else _
                 Me.Text = "Edit ProgramLauncher Programs"
         Else
@@ -27,7 +26,7 @@ Public Class ProgramLauncher
             fullArgument = fullArgument.Remove(fullArgument.Length - 1) ' to get rid of the extra space at the end
             lblInstructions.Text = "Select a program to open """ & fullArgument & """ with:"
             
-            If New WindowsPrincipal(WindowsIdentity.GetCurrent).IsInRole(WindowsBuiltInRole.Administrator) Then _
+            If WalkmanLib.IsAdmin Then _
                 Me.Text = "[Admin] Select a program to open """ & fullArgument & """ with:" Else _
                 Me.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
@@ -143,17 +142,25 @@ Public Class ProgramLauncher
     Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
         If entry.Text = "Copy to Clipboard" Then
             If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                Clipboard.SetText(String.Format(entry.SubItems.Item(1).Text, argument), TextDataFormat.UnicodeText)
+                WalkmanLib.SafeSetText(String.Format(entry.SubItems.Item(1).Text, argument))
             Else
-                Clipboard.SetText(entry.SubItems.Item(1).Text & argument, TextDataFormat.UnicodeText)
+                WalkmanLib.SafeSetText(entry.SubItems.Item(1).Text & argument)
             End If
             Exit Sub
         End If
         Try
-            If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
+            If entry.Text.StartsWith("elevate ") Then
+                If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                    WalkmanLib.RunAsAdmin(entry.Text.Substring(8), String.Format(entry.SubItems.Item(1).Text, argument))
+                Else
+                    WalkmanLib.RunAsAdmin(entry.Text.Substring(8), entry.SubItems.Item(1).Text & argument)
+                End If
             Else
-                Process.Start(entry.Text, entry.SubItems.Item(1).Text & argument)
+                If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                    Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
+                Else
+                    Process.Start(entry.Text, entry.SubItems.Item(1).Text & argument)
+                End If
             End If
         Catch ex As Exception
             Try
@@ -244,12 +251,13 @@ Public Class ProgramLauncher
         Dim item1 = New String() {"C:\Windows\explorer.exe", """{0}"""}
         Dim item2 = New String() {"C:\Windows\explorer.exe", "/select, ""{0}"""}
         Dim item3 = New String() {"C:\Windows\notepad.exe", """{0}"""}
-        Dim item4 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
-        Dim item5 = New String() {"Copy to Clipboard", """{0}"""}
-        Dim item6 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
-        Dim item7 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
-        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
-        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8}
+        Dim item4 = New String() {"elevate C:\Windows\notepad.exe", "{0}"}
+        Dim item5 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
+        Dim item6 = New String() {"Copy to Clipboard", """{0}"""}
+        Dim item7 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
+        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
+        Dim item9 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
+        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9}
             lstPrograms.Items.Add(New ListViewItem(item))
         Next
         

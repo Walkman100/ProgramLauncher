@@ -62,6 +62,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="WalkmanLib\WalkmanLibDotNet.vb">
+      <Link>WalkmanLibDotNet.vb</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
