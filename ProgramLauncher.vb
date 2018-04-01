@@ -298,6 +298,7 @@ Public Class ProgramLauncher
                         Else
                             Me.Width = elementAttribute -67
                         End If
+                        Me.Location = New Drawing.Point(My.Computer.Screen.WorkingArea.Width/2 - Me.Width/2, Me.Location.Y)
                     End If
                     
                     elementAttribute = reader("height")
@@ -307,6 +308,7 @@ Public Class ProgramLauncher
                         Else
                             Me.Height = elementAttribute +29
                         End If
+                        Me.Location = New Drawing.Point(Me.Location.X, My.Computer.Screen.WorkingArea.Height/2 - Me.Height/2)
                     End If
                 End If
             End If
