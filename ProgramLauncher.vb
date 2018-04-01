@@ -46,6 +46,8 @@ Public Class ProgramLauncher
             ReadConfig(configFilePath)
         ElseIf File.Exists(configFilePath) Then
             ReadConfig(configFilePath)
+        Else
+            LoadInitialList()
         End If
         
         CheckButtons
@@ -238,6 +240,24 @@ Public Class ProgramLauncher
         End If
     End Sub
     
+    Private Sub LoadInitialList()
+        Dim item1 = New String() {"C:\Windows\explorer.exe", """{0}"""}
+        Dim item2 = New String() {"C:\Windows\explorer.exe", "/select, ""{0}"""}
+        Dim item3 = New String() {"C:\Windows\notepad.exe", """{0}"""}
+        Dim item4 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
+        Dim item5 = New String() {"Copy to Clipboard", """{0}"""}
+        Dim item6 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
+        Dim item7 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
+        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
+        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8}
+            lstPrograms.Items.Add(New ListViewItem(item))
+        Next
+        
+        Me.Height = 240
+        colheadPath.Width = 292
+        colheadProgramArgs.Width = 151
+    End Sub
+    
     Private Sub ReadConfig(path As String)
         Dim reader As XmlReader = XmlReader.Create(path)
         Try
@@ -252,7 +272,7 @@ Public Class ProgramLauncher
             If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ProgramList" Then
                 While reader.IsStartElement
                     If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Program" Then
-                        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{}"""})
+                        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
                         
                         elementAttribute = reader("path")
                         If elementAttribute IsNot Nothing Then
