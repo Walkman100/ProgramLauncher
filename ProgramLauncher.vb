@@ -132,15 +132,19 @@ Public Class ProgramLauncher
         End If
     End Sub
     
-    Sub lstPrograms_DoubleClick() Handles lstPrograms.DoubleClick
+    Sub lstPrograms_DoubleClick(sender As Object, e As EventArgs) Handles lstPrograms.DoubleClick
         If lstPrograms.SelectedItems.Count > 0 Then
-            RunSelectedEntry(btnRun, New System.Windows.Forms.MouseEventArgs(MouseButtons.Left,2,0,0,0))
+            RunSelectedEntry(btnRun, e)
         End If
     End Sub
     
     Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
         If entry.Text = "Copy to Clipboard" Then
-            Clipboard.SetText(argument, TextDataFormat.UnicodeText)
+            If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                Clipboard.SetText(String.Format(entry.SubItems.Item(1).Text, argument), TextDataFormat.UnicodeText)
+            Else
+                Clipboard.SetText(entry.SubItems.Item(1).Text & argument, TextDataFormat.UnicodeText)
+            End If
             Exit Sub
         End If
         Try
