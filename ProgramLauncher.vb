@@ -2,7 +2,8 @@ Imports System.Security.Principal
 Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
-    Dim configFilePath As String = Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS\ProgramLauncher.xml"
+    Dim configFileName As String = "ProgramLauncher.xml"
+    Dim configFilePath As String = Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS", configFileName)
     Dim fullArgument As String = ""
     
     Public Sub New()
@@ -21,8 +22,9 @@ Public Class ProgramLauncher
             
             'get CommandLineArgs and apply/run them
             For Each s As String In My.Application.CommandLineArgs
-                fullArgument &= s
+                fullArgument &= s & " "
             Next
+            fullArgument = fullArgument.Remove(fullArgument.Length - 1) ' to get rid of the extra space at the end
             lblInstructions.Text = "Select a program to open """ & fullArgument & """ with:"
             
             If New WindowsPrincipal(WindowsIdentity.GetCurrent).IsInRole(WindowsBuiltInRole.Administrator) Then _
@@ -32,15 +34,15 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
-        If Not Directory.Exists(Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS") Then
-            Directory.CreateDirectory(Environment.GetEnvironmentVariable("AppData") & "\WalkmanOSS")
+        If Not Directory.Exists(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS")) Then
+            Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS"))
         End If
         
-        If File.Exists(Application.StartupPath & "\ProgramLauncher.xml") Then
-            configFilePath = Application.StartupPath & "\ProgramLauncher.xml"
+        If File.Exists(Path.Combine(Application.StartupPath, configFileName)) Then
+            configFilePath = Path.Combine(Application.StartupPath, configFileName)
             ReadConfig(configFilePath)
-        ElseIf File.Exists("SteamPlaceholder.xml") Then
-            configFilePath = (New IO.FileInfo("ProgramLauncher.xml")).FullName
+        ElseIf File.Exists(configFileName) Then
+            configFilePath = New IO.FileInfo(configFileName).FullName
             ReadConfig(configFilePath)
         ElseIf File.Exists(configFilePath) Then
             ReadConfig(configFilePath)
