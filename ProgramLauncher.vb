@@ -195,11 +195,16 @@ Public Class ProgramLauncher
             Exit Sub
         End If
         Try
-            If entry.Text.StartsWith("elevate ") Then
+            If entry.Text.StartsWith("elevate ") Or entry.Text.StartsWith("sudo ") Or entry.Text.StartsWith("runas ") Then
+                Dim programString As String = ""
+                If entry.Text.StartsWith("elevate ") Then programString = entry.Text.Substring(8)
+                If entry.Text.StartsWith("sudo ") Then programString = entry.Text.Substring(5)
+                If entry.Text.StartsWith("runas ") Then programString = entry.Text.Substring(6)
+                
                 If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                    WalkmanLib.RunAsAdmin(entry.Text.Substring(8), String.Format(entry.SubItems.Item(1).Text, argument))
+                    WalkmanLib.RunAsAdmin(programString, String.Format(entry.SubItems.Item(1).Text, argument))
                 Else
-                    WalkmanLib.RunAsAdmin(entry.Text.Substring(8), entry.SubItems.Item(1).Text & argument)
+                    WalkmanLib.RunAsAdmin(programString,               entry.SubItems.Item(1).Text & argument)
                 End If
             Else
                 If entry.SubItems.Item(1).Text.Contains("{0}") Then
