@@ -54,7 +54,9 @@ Public Class ProgramLauncher
     
     Private Sub AddItem() Handles btnAdd.Click
         Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
-        lstPrograms.FocusedItem = lstPrograms.Items.Add(tmpListViewItem)
+        lstPrograms.Items.Add(tmpListViewItem).Selected = True
+        tmpListViewItem.Focused = True
+        
         Browse()
         CheckButtons
     End Sub
@@ -65,7 +67,7 @@ Public Class ProgramLauncher
                 item.Remove
             Next
         Else
-            lstPrograms.FocusedItem.Remove
+            lstPrograms.SelectedItems(0).Remove
         End If
         CheckButtons
     End Sub
@@ -123,8 +125,8 @@ Public Class ProgramLauncher
                     If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
                 Next
             Else
-                inputBoxText = InputBox("Enter the arguments to start """ & lstPrograms.FocusedItem.Text & """ with:", "", lstPrograms.FocusedItem.SubItems.Item(1).Text)
-                If inputBoxText <> "" Then lstPrograms.FocusedItem.SubItems.Item(1).Text = inputBoxText
+                inputBoxText = InputBox("Enter the arguments to start """ & lstPrograms.SelectedItems(0).Text & """ with:", "", lstPrograms.SelectedItems(0).SubItems.Item(1).Text)
+                If inputBoxText <> "" Then lstPrograms.SelectedItems(0).SubItems.Item(1).Text = inputBoxText
             End If
             WriteConfig(configFilePath)
         Else
@@ -149,14 +151,14 @@ Public Class ProgramLauncher
             Next
             WriteConfig(configFilePath)
         Else
-            openFileDialogBrowse.Title = "Select file to replace """ & lstPrograms.FocusedItem.Text & """ with:"
-            If lstPrograms.FocusedItem.Text.Contains("\") Then
-                openFileDialogBrowse.InitialDirectory = lstPrograms.FocusedItem.Text.Remove(lstPrograms.FocusedItem.Text.LastIndexOf("\"))
+            openFileDialogBrowse.Title = "Select file to replace """ & lstPrograms.SelectedItems(0).Text & """ with:"
+            If lstPrograms.SelectedItems(0).Text.Contains("\") Then
+                openFileDialogBrowse.InitialDirectory = lstPrograms.SelectedItems(0).Text.Remove(lstPrograms.SelectedItems(0).Text.LastIndexOf("\"))
             Else
                 openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
             End If
             If openFileDialogBrowse.ShowDialog() = DialogResult.OK Then
-                lstPrograms.FocusedItem.Text = openFileDialogBrowse.FileName
+                lstPrograms.SelectedItems(0).Text = openFileDialogBrowse.FileName
                 WriteConfig(configFilePath)
             End If
         End If
@@ -169,10 +171,10 @@ Public Class ProgramLauncher
                     RunProgram(item)
                 Next
             Else
-                RunProgram(lstPrograms.FocusedItem)
+                RunProgram(lstPrograms.SelectedItems(0))
             End If
         Else
-            RunProgram(lstPrograms.FocusedItem, fullArgument)
+            RunProgram(lstPrograms.SelectedItems(0), fullArgument)
             If sender.Equals(btnRun) Then CloseProgramLauncher
         End If
     End Sub
@@ -220,8 +222,8 @@ Public Class ProgramLauncher
         Application.Exit()
     End Sub
     
-    Private Sub CheckButtons() Handles lstPrograms.Click, lstPrograms.SelectedIndexChanged, lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
-        If IsNothing(lstPrograms.FocusedItem) Then
+    Private Sub CheckButtons() Handles lstPrograms.ItemSelectionChanged, lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
+        If lstPrograms.SelectedItems.Count = 0 Then
             If isProgramEditor Then
                 btnRemove.Enabled = False
                 btnMoveUp.Enabled = False
@@ -282,12 +284,14 @@ Public Class ProgramLauncher
     Private Sub lstPrograms_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
         If e.Data.GetDataPresent(DataFormats.Text) Then
             Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " ", "draggedFile"})
-            lstPrograms.FocusedItem = lstPrograms.Items.Add(tmpListViewItem)
+            lstPrograms.Items.Add(tmpListViewItem).Selected = True
+            tmpListViewItem.Focused = True
         ElseIf e.Data.GetDataPresent(DataFormats.FileDrop)
             For i = 0 To Integer.MaxValue
                 If (e.Data.GetData(DataFormats.FileDrop)(i) <> Nothing) Then
                     Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.FileDrop)(i), " ", "draggedFile"})
-                    lstPrograms.FocusedItem = lstPrograms.Items.Add(tmpListViewItem)
+                    lstPrograms.Items.Add(tmpListViewItem).Selected = True
+                    tmpListViewItem.Focused = True
                 Else
                     Exit For
                 End If
