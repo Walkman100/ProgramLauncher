@@ -75,6 +75,7 @@ Public Class ProgramLauncher
     Private Sub btnMoveUp_Click() Handles btnMoveUp.Click
         Try
             If lstPrograms.SelectedItems.Count > 0 Then
+                lstPrograms.Sorting = SortOrder.None
                 Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
                 Dim selectedIndex As Integer = selected.Index
                 Dim totalItems As Integer = lstPrograms.Items.Count
@@ -87,7 +88,7 @@ Public Class ProgramLauncher
                 End If
                 CheckButtons
             Else
-                MessageBox.Show("You can only move one item at a time. Please select only one item and try again.", "Item Select", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+                btnMoveUp.Enabled = False
             End If
         Catch ex As Exception
             MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
@@ -97,6 +98,7 @@ Public Class ProgramLauncher
     Private Sub btnMoveDown_Click() Handles btnMoveDown.Click
         Try
             If lstPrograms.SelectedItems.Count > 0 Then
+                lstPrograms.Sorting = SortOrder.None
                 Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
                 Dim selectedIndex As Integer = selected.Index
                 Dim totalItems As Integer = lstPrograms.Items.Count
@@ -109,7 +111,7 @@ Public Class ProgramLauncher
                 End If
                 CheckButtons
             Else
-                MessageBox.Show("You can only move one item at a time. Please select only one item and try again.", "Item Select", MessageBoxButtons.OK, MessageBoxIcon.[Stop])
+                btnMoveDown.Enabled = False
             End If
         Catch ex As Exception
             MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
@@ -257,9 +259,11 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub lstPrograms_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles lstPrograms.ColumnClick
-        lstPrograms.Sorting = IIf(lstPrograms.Sorting = SortOrder.Ascending, SortOrder.Descending, SortOrder.Ascending)
-        lstPrograms.Sort
-        'lstPrograms.Sort(e.Column)
+        If e.Column = 0 Then
+            lstPrograms.Sorting = IIf(lstPrograms.Sorting = SortOrder.Ascending, SortOrder.Descending, SortOrder.Ascending)
+        Else
+            'lstPrograms.Sort(e.Column)
+        End If
     End Sub
     
     Private Sub ResizeByHeader(sender As Object, e As EventArgs) Handles contextCommandsResizePathHeader.Click, contextCommandsResizeArgsHeader.Click
