@@ -70,6 +70,50 @@ Public Class ProgramLauncher
         CheckButtons
     End Sub
     
+    Private Sub btnMoveUp_Click() Handles btnMoveUp.Click
+        Try
+            If lstPrograms.SelectedItems.Count > 0 Then
+                Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
+                Dim selectedIndex As Integer = selected.Index
+                Dim totalItems As Integer = lstPrograms.Items.Count
+                If selectedIndex = 0 Then
+                    lstPrograms.Items.Remove(selected)
+                    lstPrograms.Items.Insert(totalItems - 1, selected)
+                Else
+                    lstPrograms.Items.Remove(selected)
+                    lstPrograms.Items.Insert(selectedIndex - 1, selected)
+                End If
+                CheckButtons
+            Else
+                MessageBox.Show("You can only move one item at a time. Please select only one item and try again.", "Item Select", MessageBoxButtons.OK, MessageBoxIcon.Stop)
+            End If
+        Catch ex As Exception
+            MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
+        End Try
+    End Sub
+    
+    Private Sub btnMoveDown_Click() Handles btnMoveDown.Click
+        Try
+            If lstPrograms.SelectedItems.Count > 0 Then
+                Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
+                Dim selectedIndex As Integer = selected.Index
+                Dim totalItems As Integer = lstPrograms.Items.Count
+                If selectedIndex = totalItems - 1 Then
+                    lstPrograms.Items.Remove(selected)
+                    lstPrograms.Items.Insert(0, selected)
+                Else
+                    lstPrograms.Items.Remove(selected)
+                    lstPrograms.Items.Insert(selectedIndex + 1, selected)
+                End If
+                CheckButtons
+            Else
+                MessageBox.Show("You can only move one item at a time. Please select only one item and try again.", "Item Select", MessageBoxButtons.OK, MessageBoxIcon.[Stop])
+            End If
+        Catch ex As Exception
+            MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
+        End Try
+    End Sub
+    
     Private Sub btnEdit_Click() Handles btnEdit.Click
         If isProgramEditor Then
             Dim inputBoxText As String
@@ -180,6 +224,8 @@ Public Class ProgramLauncher
         If IsNothing(lstPrograms.FocusedItem) Then
             If isProgramEditor Then
                 btnRemove.Enabled = False
+                btnMoveUp.Enabled = False
+                btnMoveDown.Enabled = False
                 btnEdit.Enabled = False
                 btnBrowse.Enabled = False
                 btnRun.Enabled = False
@@ -190,6 +236,8 @@ Public Class ProgramLauncher
         Else
             If isProgramEditor Then
                 btnRemove.Enabled = True
+                btnMoveDown.Enabled = (lstPrograms.SelectedItems(0).Index <> lstPrograms.Items.Count -1)
+                btnMoveUp.Enabled = (lstPrograms.SelectedItems(0).Index <> 0)
                 btnEdit.Enabled = True
                 btnBrowse.Enabled = True
                 btnRun.Enabled = True
@@ -261,7 +309,7 @@ Public Class ProgramLauncher
             lstPrograms.Items.Add(New ListViewItem(item))
         Next
         
-        Me.Height = 240
+        'Me.Height = 240 (disabled because the default form size is big enough)
         colheadPath.Width = 292
         colheadProgramArgs.Width = 151
     End Sub
