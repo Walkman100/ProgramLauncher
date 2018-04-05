@@ -1,3 +1,4 @@
+Imports System.Runtime.CompilerServices
 Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
@@ -30,6 +31,7 @@ Public Class ProgramLauncher
                 Me.Text = "[Admin] Select a program to open """ & fullArgument & """ with:" Else _
                 Me.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
+        lstPrograms.DoubleBuffered(True)
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
@@ -79,6 +81,8 @@ Public Class ProgramLauncher
                 Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
                 Dim selectedIndex As Integer = selected.Index
                 Dim totalItems As Integer = lstPrograms.Items.Count
+                
+                lstPrograms.BeginUpdate()
                 If selectedIndex = 0 Then
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(totalItems - 1, selected)
@@ -86,6 +90,8 @@ Public Class ProgramLauncher
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(selectedIndex - 1, selected)
                 End If
+                lstPrograms.EndUpdate()
+                
                 CheckButtons(True)
             Else
                 btnMoveUp.Enabled = False
@@ -102,6 +108,8 @@ Public Class ProgramLauncher
                 Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
                 Dim selectedIndex As Integer = selected.Index
                 Dim totalItems As Integer = lstPrograms.Items.Count
+                
+                lstPrograms.BeginUpdate()
                 If selectedIndex = totalItems - 1 Then
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(0, selected)
@@ -109,6 +117,8 @@ Public Class ProgramLauncher
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(selectedIndex + 1, selected)
                 End If
+                lstPrograms.EndUpdate()
+                
                 CheckButtons(True)
             Else
                 btnMoveDown.Enabled = False
@@ -461,3 +471,11 @@ Public Class ProgramLauncher
         End Try
     End Sub
 End Class
+
+Module ControlExtensions ' thanks to https://stackoverflow.com/a/15268338/2999220
+    <Extension()>
+    Public Sub DoubleBuffered(control As Control, enable As Boolean)
+        Dim doubleBufferPropertyInfo = control.[GetType]().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic)
+        doubleBufferPropertyInfo.SetValue(control, enable, Nothing)
+    End Sub
+End Module
