@@ -58,7 +58,7 @@ Public Class ProgramLauncher
         tmpListViewItem.Focused = True
         
         Browse()
-        CheckButtons
+        CheckButtons(True)
     End Sub
     
     Private Sub RemoveItem() Handles btnRemove.Click
@@ -69,7 +69,7 @@ Public Class ProgramLauncher
         Else
             lstPrograms.SelectedItems(0).Remove
         End If
-        CheckButtons
+        CheckButtons(True)
     End Sub
     
     Private Sub btnMoveUp_Click() Handles btnMoveUp.Click
@@ -86,7 +86,7 @@ Public Class ProgramLauncher
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(selectedIndex - 1, selected)
                 End If
-                CheckButtons
+                CheckButtons(True)
             Else
                 btnMoveUp.Enabled = False
             End If
@@ -109,7 +109,7 @@ Public Class ProgramLauncher
                     lstPrograms.Items.Remove(selected)
                     lstPrograms.Items.Insert(selectedIndex + 1, selected)
                 End If
-                CheckButtons
+                CheckButtons(True)
             Else
                 btnMoveDown.Enabled = False
             End If
@@ -229,7 +229,14 @@ Public Class ProgramLauncher
         Application.Exit()
     End Sub
     
-    Private Sub CheckButtons() Handles lstPrograms.ItemSelectionChanged, lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
+    Private Sub lstPrograms_ItemSelectionChanged() Handles lstPrograms.ItemSelectionChanged
+        CheckButtons
+    End Sub
+    Private Sub lstPrograms_ListDataEdited() Handles lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
+        CheckButtons(True)
+    End Sub
+    
+    Private Sub CheckButtons(Optional writeToConfig As Boolean = False)
         If lstPrograms.SelectedItems.Count = 0 Then
             If isProgramEditor Then
                 btnRemove.Enabled = False
@@ -255,7 +262,7 @@ Public Class ProgramLauncher
                 btnOpenOnly.Enabled = True
             End If
         End If
-        If isProgramEditor Then WriteConfig(configFilePath)
+        If isProgramEditor And writeToConfig Then WriteConfig(configFilePath)
     End Sub
     
     Private Sub lstPrograms_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles lstPrograms.ColumnClick
@@ -417,38 +424,40 @@ Public Class ProgramLauncher
         XMLwSettings.Indent = True
         Dim writer As XmlWriter = XmlWriter.Create(path, XMLwSettings)
         
-        writer.WriteStartDocument()
-        writer.WriteStartElement("ProgramLauncher")
-        
-        writer.WriteStartElement("ProgramList")
-        For Each item In lstPrograms.Items
-            writer.WriteStartElement("Program")
-            writer.WriteAttributeString("path", item.Text)
-            writer.WriteAttributeString("args", item.SubItems.Item(1).Text)
-            writer.WriteEndElement()
-        Next
-        writer.WriteEndElement()
-        
-        writer.WriteStartElement("Settings")
-            writer.WriteStartElement("ColumnSettings")
-                writer.WriteStartElement("PathColumn")
-                    writer.WriteAttributeString("index", colheadPath.DisplayIndex)
-                    writer.WriteAttributeString("width", colheadPath.Width)
+        Try
+            writer.WriteStartDocument()
+            writer.WriteStartElement("ProgramLauncher")
+            
+            writer.WriteStartElement("ProgramList")
+            For Each item In lstPrograms.Items
+                writer.WriteStartElement("Program")
+                writer.WriteAttributeString("path", item.Text)
+                writer.WriteAttributeString("args", item.SubItems.Item(1).Text)
                 writer.WriteEndElement()
-                writer.WriteStartElement("ArgColumn")
-                    writer.WriteAttributeString("index", colheadProgramArgs.DisplayIndex)
-                    writer.WriteAttributeString("width", colheadProgramArgs.Width)
+            Next
+            writer.WriteEndElement()
+            
+            writer.WriteStartElement("Settings")
+                writer.WriteStartElement("ColumnSettings")
+                    writer.WriteStartElement("PathColumn")
+                        writer.WriteAttributeString("index", colheadPath.DisplayIndex)
+                        writer.WriteAttributeString("width", colheadPath.Width)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("ArgColumn")
+                        writer.WriteAttributeString("index", colheadProgramArgs.DisplayIndex)
+                        writer.WriteAttributeString("width", colheadProgramArgs.Width)
+                    writer.WriteEndElement()
+                writer.WriteEndElement()
+                writer.WriteStartElement("WindowSize")
+                    writer.WriteAttributeString("width", Me.Width)
+                    writer.WriteAttributeString("height", Me.Height)
                 writer.WriteEndElement()
             writer.WriteEndElement()
-            writer.WriteStartElement("WindowSize")
-                writer.WriteAttributeString("width", Me.Width)
-                writer.WriteAttributeString("height", Me.Height)
+            
             writer.WriteEndElement()
-        writer.WriteEndElement()
-        
-        writer.WriteEndElement()
-        writer.WriteEndDocument()
-        
-        writer.Close
+            writer.WriteEndDocument()
+        Finally
+            writer.Close
+        End Try
     End Sub
 End Class
