@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("A program that you start with an argument, that asks you which program you want to use")> 
 <Assembly: AssemblyCompany("WalkmanOSS")> 
 <Assembly: AssemblyProduct("ProgramLauncher")> 
-<Assembly: AssemblyCopyright("FOSS from Walkman 2015")> 
+<Assembly: AssemblyCopyright("FOSS from Walkman 2015-18")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
