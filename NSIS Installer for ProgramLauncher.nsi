@@ -25,6 +25,7 @@ Page license
 Page components
 Page directory
 Page instfiles
+Page custom postInstallShow postInstallFinish ": Install Complete"
 UninstPage uninstConfirm
 UninstPage instfiles
 
@@ -128,17 +129,58 @@ SubSectionEnd
 ; Functions
 
 Function .onInit
-  MessageBox MB_YESNO "This will install ${ProgramName}. Do you wish to continue?" IDYES gogogo
-    Abort
-  gogogo:
   SetShellVarContext all
   SetAutoClose true
 FunctionEnd
 
-Function .onInstSuccess
-    MessageBox MB_YESNO "Install Succeeded! Open ReadMe?" IDNO NoReadme
-      ExecShell "open" "https://github.com/Walkman100/ProgramLauncher/blob/master/README.md#programlauncher-"
-    NoReadme:
+; Custom Install Complete page
+
+!include nsDialogs.nsh
+!include LogicLib.nsh ; For ${IF} logic
+Var Dialog
+Var Label
+Var CheckboxReadme
+Var CheckboxReadme_State
+Var CheckboxRunProgram
+Var CheckboxRunProgram_State
+
+Function postInstallShow
+  nsDialogs::Create 1018
+  Pop $Dialog
+  ${If} $Dialog == error
+    Abort
+  ${EndIf}
+  
+  ${NSD_CreateLabel} 0 0 100% 12u "Setup will launch these tasks when you click close:"
+  Pop $Label
+  
+  ${NSD_CreateCheckbox} 10u 30u 100% 10u "&Open Readme"
+  Pop $CheckboxReadme
+  ${If} $CheckboxReadme_State == ${BST_CHECKED}
+    ${NSD_Check} $CheckboxReadme
+  ${EndIf}
+  
+  ${NSD_CreateCheckbox} 10u 50u 100% 10u "&Launch ${ProgramName}"
+  Pop $CheckboxRunProgram
+  ${If} $CheckboxRunProgram_State == ${BST_CHECKED}
+    ${NSD_Check} $CheckboxRunProgram
+  ${EndIf}
+  
+  # alternative for the above ${If}:
+  #${NSD_SetState} $Checkbox_State
+  nsDialogs::Show
+FunctionEnd
+
+Function postInstallFinish
+  ${NSD_GetState} $CheckboxReadme $CheckboxReadme_State
+  ${NSD_GetState} $CheckboxRunProgram $CheckboxRunProgram_State
+  
+  ${If} $CheckboxReadme_State == ${BST_CHECKED}
+    ExecShell "open" "https://github.com/Walkman100/${ProgramName}/blob/master/README.md#programlauncher-"
+  ${EndIf}
+  ${If} $CheckboxRunProgram_State == ${BST_CHECKED}
+    ExecShell "open" "$INSTDIR\${ProgramName}.exe"
+  ${EndIf}
 FunctionEnd
 
 ; Uninstaller
@@ -210,9 +252,6 @@ SectionEnd
 ; Uninstaller Functions
 
 Function un.onInit
-    MessageBox MB_YESNO "This will uninstall ${ProgramName}. Continue?" IDYES NoAbort
-      Abort ; causes uninstaller to quit.
-    NoAbort:
     SetShellVarContext all
     SetAutoClose true
 FunctionEnd
