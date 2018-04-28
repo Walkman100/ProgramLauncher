@@ -252,14 +252,14 @@ SectionEnd
 ; Uninstaller Functions
 
 Function un.onInit
-    SetShellVarContext all
-    SetAutoClose true
+  SetShellVarContext all
+  SetAutoClose true
 FunctionEnd
 
 Function un.onUninstFailed
-    MessageBox MB_OK "Uninstall Cancelled"
+  MessageBox MB_OK "Uninstall Cancelled"
 FunctionEnd
 
 Function un.onUninstSuccess
-    MessageBox MB_OK "Uninstall Completed"
+  MessageBox MB_OK "Uninstall Completed"
 FunctionEnd
