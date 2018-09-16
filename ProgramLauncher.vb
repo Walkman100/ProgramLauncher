@@ -38,6 +38,7 @@ Public Class ProgramLauncher
         If Not Directory.Exists(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS")) Then
             Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS"))
         End If
+        lblVersion.Text = My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build
         
         If File.Exists(Path.Combine(Application.StartupPath, configFileName)) Then
             configFilePath = Path.Combine(Application.StartupPath, configFileName)

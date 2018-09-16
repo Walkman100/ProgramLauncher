@@ -8,6 +8,7 @@ Partial Class ProgramLauncher
         Me.colheadPath = New System.Windows.Forms.ColumnHeader()
         Me.colheadProgramArgs = New System.Windows.Forms.ColumnHeader()
         Me.btnOpenOnly = New System.Windows.Forms.Button()
+        Me.lblVersion = New System.Windows.Forms.Label()
         Me.SuspendLayout
         'lblInstructions
         Me.lblInstructions.AutoSize = true
@@ -63,7 +64,16 @@ Partial Class ProgramLauncher
         Me.btnOpenOnly.Size = New System.Drawing.Size(86, 23)
         Me.btnOpenOnly.TabIndex = 3
         Me.btnOpenOnly.Text = "Open"
-        Me.btnOpenOnly.UseVisualStyleBackColor = true
+        Me.btnOpenOnly.UseVisualStyleBackColor = True
+        'lblVersion
+        Me.lblVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.lblVersion.AutoSize = true
+        Me.lblVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblVersion.Location = New System.Drawing.Point(450, 210)
+        Me.lblVersion.Name = "lblVersion"
+        Me.lblVersion.Size = New System.Drawing.Size(21, 9)
+        Me.lblVersion.TabIndex = 10
+        Me.lblVersion.Text = "1.0.0"
         'ProgramSelector
         Me.AcceptButton = Me.btnRun
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -72,6 +82,7 @@ Partial Class ProgramLauncher
         Me.ClientSize = New System.Drawing.Size(472, 221)
         Me.Controls.Add(Me.btnOpenOnly)
         Me.Controls.Add(Me.lblInstructions)
+        Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.btnRun)
         Me.Controls.Add(Me.btnEdit)
         Me.Controls.Add(Me.btnEnd)

@@ -48,6 +48,7 @@
         Me.lblInstructions = New System.Windows.Forms.Label()
         Me.btnMoveUp = New System.Windows.Forms.Button()
         Me.btnMoveDown = New System.Windows.Forms.Button()
+        Me.lblVersion = New System.Windows.Forms.Label()
         Me.contextCommands.SuspendLayout
         Me.SuspendLayout
         '
@@ -242,6 +243,17 @@
         Me.btnMoveDown.Text = "Move ▼"
         Me.btnMoveDown.UseVisualStyleBackColor = true
         '
+        'lblVersion
+        '
+        Me.lblVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.lblVersion.AutoSize = true
+        Me.lblVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 6!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblVersion.Location = New System.Drawing.Point(515, 239)
+        Me.lblVersion.Name = "lblVersion"
+        Me.lblVersion.Size = New System.Drawing.Size(21, 9)
+        Me.lblVersion.TabIndex = 10
+        Me.lblVersion.Text = "1.0.0"
+        '
         'ProgramLauncher
         '
         Me.AcceptButton = Me.btnBrowse
@@ -249,6 +261,7 @@
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnEnd
         Me.ClientSize = New System.Drawing.Size(539, 250)
+        Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.btnMoveDown)
         Me.Controls.Add(Me.btnMoveUp)
         Me.Controls.Add(Me.btnRun)
@@ -267,6 +280,7 @@
         Me.ResumeLayout(false)
         Me.PerformLayout
     End Sub
+    Private lblVersion As System.Windows.Forms.Label
     Private WithEvents btnMoveDown As System.Windows.Forms.Button
     Private WithEvents btnMoveUp As System.Windows.Forms.Button
     Private WithEvents contextCommandsResizeAllContent As System.Windows.Forms.ToolStripMenuItem
