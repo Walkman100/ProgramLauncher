@@ -35,6 +35,7 @@ Section "Executable & Uninstaller"
   SectionIn RO
   SetOutPath $INSTDIR
   File "bin\Release\${ProgramName}.exe"
+  File "bin\Release\${ProgramName}.exe.config"
   WriteUninstaller "${ProgramName}-Uninst.exe"
 SectionEnd
 
@@ -205,6 +206,7 @@ FunctionEnd
 Section "Uninstall"
   Delete "$INSTDIR\${ProgramName}-Uninst.exe" ; Remove Application Files
   Delete "$INSTDIR\${ProgramName}.exe"
+  Delete "$INSTDIR\${ProgramName}.exe.config"
   RMDir "$INSTDIR"
   
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${ProgramName}" ; Remove Windows Programs & Features integration (uninstall info)
@@ -264,7 +266,6 @@ Section "Uninstall"
   DeleteRegKey HKCR "*\shell\${ProgramName}" ; Remove context entry item for all files
   DeleteRegKey HKCR "IE.AssocFile.URL\shell\${ProgramName}" ; remove context entry for .url files
   DeleteRegKey HKCR "Folder\shell\${ProgramName}" ; remove context entry for folders
-  
 SectionEnd
 
 ; Uninstaller Functions
