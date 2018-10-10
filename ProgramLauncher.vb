@@ -57,6 +57,7 @@ Public Class ProgramLauncher
     
     Private Sub AddItem() Handles btnAdd.Click
         Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
+        lstPrograms.SelectedItems.Clear() ' deselect existing items
         lstPrograms.Items.Add(tmpListViewItem).Selected = True
         tmpListViewItem.Focused = True
         
@@ -325,9 +326,11 @@ Public Class ProgramLauncher
     Private Sub lstPrograms_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
         If e.Data.GetDataPresent(DataFormats.Text) Then
             Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " ", "draggedFile"})
+            lstPrograms.SelectedItems.Clear() ' deselect existing items
             lstPrograms.Items.Add(tmpListViewItem).Selected = True
             tmpListViewItem.Focused = True
         ElseIf e.Data.GetDataPresent(DataFormats.FileDrop)
+            lstPrograms.SelectedItems.Clear() ' deselect existing items
             For i = 0 To Integer.MaxValue
                 If (e.Data.GetData(DataFormats.FileDrop)(i) <> Nothing) Then
                     Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.FileDrop)(i), " ", "draggedFile"})
