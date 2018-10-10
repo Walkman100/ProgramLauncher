@@ -205,9 +205,21 @@ Public Class ProgramLauncher
             Else
                 WalkmanLib.SafeSetText(entry.SubItems.Item(1).Text & argument)
             End If
+            
             Exit Sub
         End If
+        
         Try
+            If entry.Text.EndsWith(":") Then ' launching a protocol is a bit different
+                If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                    Process.Start(entry.Text & String.Format(entry.SubItems.Item(1).Text, argument))
+                Else
+                    Process.Start(entry.Text &               entry.SubItems.Item(1).Text & argument)
+                End If
+                
+                Exit Sub
+            End If
+            
             If entry.Text.StartsWith("elevate ") Or entry.Text.StartsWith("sudo ") Or entry.Text.StartsWith("runas ") Then
                 Dim programString As String = ""
                 If entry.Text.StartsWith("elevate ") Then programString = entry.Text.Substring(8)
@@ -219,12 +231,14 @@ Public Class ProgramLauncher
                 Else
                     WalkmanLib.RunAsAdmin(programString,               entry.SubItems.Item(1).Text & argument)
                 End If
+                
+                Exit Sub
+            End If
+            
+            If entry.SubItems.Item(1).Text.Contains("{0}") Then
+                Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
             Else
-                If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                    Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
-                Else
-                    Process.Start(entry.Text, entry.SubItems.Item(1).Text & argument)
-                End If
+                Process.Start(entry.Text,               entry.SubItems.Item(1).Text & argument)
             End If
         Catch ex As Exception
             Try
@@ -330,13 +344,14 @@ Public Class ProgramLauncher
         Dim item1 = New String() {"C:\Windows\explorer.exe", """{0}"""}
         Dim item2 = New String() {"C:\Windows\explorer.exe", "/select, ""{0}"""}
         Dim item3 = New String() {"C:\Windows\notepad.exe", """{0}"""}
-        Dim item4 = New String() {"elevate C:\Windows\notepad.exe", "{0}"}
+        Dim item4 = New String() {"elevate C:\Windows\notepad.exe", """{0}"""}
         Dim item5 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
         Dim item6 = New String() {"Copy to Clipboard", """{0}"""}
-        Dim item7 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
-        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
-        Dim item9 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
-        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9}
+        Dim item7 = New String() {"microsoft-edge:", "{0}"}
+        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
+        Dim item9 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
+        Dim item10 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
+        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10}
             lstPrograms.Items.Add(New ListViewItem(item))
         Next
         
