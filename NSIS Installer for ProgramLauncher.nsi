@@ -116,6 +116,7 @@ Section "Set as default HTTP and HTTPS Protocol handler"
       WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\Capabilities\URLAssociations" "read" "${ProgramName}URL"
       WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\Capabilities\URLAssociations" "res" "${ProgramName}URL"
       WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\Capabilities\URLAssociations" "tel" "${ProgramName}URL"
+      WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\Capabilities\URLAssociations" "steam" "${ProgramName}URL"
       
       WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\DefaultIcon" "" "$INSTDIR\${ProgramName}.exe"
       WriteRegStr HKLM "SOFTWARE\Clients\StartMenuInternet\${ProgramName}.exe\shell\open\command" "" "$\"$INSTDIR\${ProgramName}.exe$\""
