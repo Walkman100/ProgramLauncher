@@ -3,7 +3,7 @@ Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
     Dim configFileName As String = "ProgramLauncher.xml"
-    Dim configFilePath As String = Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS", configFileName)
+    Dim configFilePath As String = ""
     Dim fullArgument As String = ""
     
     Public Sub New()
@@ -35,18 +35,26 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
-        If Not Directory.Exists(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS")) Then
-            Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS"))
-        End If
         lblVersion.Text = My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build
+        If Environment.GetEnvironmentVariable("OS") = "Windows_NT" Then
+            If Not       Directory.Exists(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS")) Then
+                Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS"))
+            End If
+            configFilePath =              Path.Combine(Environment.GetEnvironmentVariable("AppData"), "WalkmanOSS", configFileName)
+        Else
+            If Not       Directory.Exists(Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "WalkmanOSS")) Then
+                Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "WalkmanOSS"))
+            End If
+            configFilePath =              Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "WalkmanOSS", configFileName)
+        End If
         
-        If File.Exists(Path.Combine(Application.StartupPath, configFileName)) Then
+        If       File.Exists(Path.Combine(Application.StartupPath, configFileName)) Then
             configFilePath = Path.Combine(Application.StartupPath, configFileName)
-            ReadConfig(configFilePath)
         ElseIf File.Exists(configFileName) Then
-            configFilePath = New IO.FileInfo(configFileName).FullName
-            ReadConfig(configFilePath)
-        ElseIf File.Exists(configFilePath) Then
+            configFilePath = (New FileInfo(configFileName)).FullName
+        End If
+        
+        If File.Exists(configFilePath) Then
             ReadConfig(configFilePath)
         Else
             LoadInitialList()
