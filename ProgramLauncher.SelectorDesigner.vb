@@ -5,6 +5,7 @@ Partial Class ProgramLauncher
         Me.btnEdit = New System.Windows.Forms.Button()
         Me.btnEnd = New System.Windows.Forms.Button()
         Me.lstPrograms = New System.Windows.Forms.ListView()
+        Me.colheadName = New System.Windows.Forms.ColumnHeader()
         Me.colheadPath = New System.Windows.Forms.ColumnHeader()
         Me.colheadProgramArgs = New System.Windows.Forms.ColumnHeader()
         Me.btnOpenOnly = New System.Windows.Forms.Button()
@@ -44,7 +45,7 @@ Partial Class ProgramLauncher
         Me.lstPrograms.Anchor = _
           CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) Or _
             System.Windows.Forms.AnchorStyles.Left) Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.lstPrograms.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colheadPath, Me.colheadProgramArgs})
+        Me.lstPrograms.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colheadName, Me.colheadPath, Me.colheadProgramArgs})
         Me.lstPrograms.FullRowSelect = true
         Me.lstPrograms.GridLines = true
         Me.lstPrograms.HideSelection = false
@@ -54,8 +55,10 @@ Partial Class ProgramLauncher
         Me.lstPrograms.TabIndex = 1
         Me.lstPrograms.UseCompatibleStateImageBehavior = false
         Me.lstPrograms.View = System.Windows.Forms.View.Details
+        'colheadName
+        Me.colheadName.Text = "Program Name"
         'colheadPath
-        Me.colheadPath.Text = "Program path"
+        Me.colheadPath.Text = "Program Path"
         'colheadProgramArgs
         Me.colheadProgramArgs.Text = "Program Arguments"
         'btnOpenOnly

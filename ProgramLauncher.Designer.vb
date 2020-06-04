@@ -33,6 +33,7 @@
         Me.btnAdd = New System.Windows.Forms.Button()
         Me.btnEnd = New System.Windows.Forms.Button()
         Me.lstPrograms = New System.Windows.Forms.ListView()
+        Me.colheadName = New System.Windows.Forms.ColumnHeader()
         Me.colheadPath = New System.Windows.Forms.ColumnHeader()
         Me.colheadProgramArgs = New System.Windows.Forms.ColumnHeader()
         Me.contextCommands = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -121,7 +122,7 @@
         Me.lstPrograms.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
                         Or System.Windows.Forms.AnchorStyles.Left)  _
                         Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.lstPrograms.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colheadPath, Me.colheadProgramArgs})
+        Me.lstPrograms.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colheadName, Me.colheadPath, Me.colheadProgramArgs})
         Me.lstPrograms.ContextMenuStrip = Me.contextCommands
         Me.lstPrograms.FullRowSelect = true
         Me.lstPrograms.GridLines = true
@@ -134,15 +135,20 @@
         Me.lstPrograms.UseCompatibleStateImageBehavior = false
         Me.lstPrograms.View = System.Windows.Forms.View.Details
         '
+        'colheadName
+        '
+        Me.colheadName.Text = "Program Name"
+        Me.colheadName.Width = 98
+        '
         'colheadPath
         '
-        Me.colheadPath.Text = "Program path"
-        Me.colheadPath.Width = 239
+        Me.colheadPath.Text = "Program Path"
+        Me.colheadPath.Width = 242
         '
         'colheadProgramArgs
         '
         Me.colheadProgramArgs.Text = "Program Arguments"
-        Me.colheadProgramArgs.Width = 202
+        Me.colheadProgramArgs.Width = 104
         '
         'contextCommands
         '
@@ -280,6 +286,7 @@
         Me.ResumeLayout(false)
         Me.PerformLayout
     End Sub
+    Private colheadName As System.Windows.Forms.ColumnHeader
     Private lblVersion As System.Windows.Forms.Label
     Private WithEvents btnMoveDown As System.Windows.Forms.Button
     Private WithEvents btnMoveUp As System.Windows.Forms.Button

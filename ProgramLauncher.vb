@@ -65,7 +65,7 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub AddItem() Handles btnAdd.Click
-        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
+        Dim tmpListViewItem As New ListViewItem(New String() {"Notepad", "notepad", """{0}"""})
         lstPrograms.SelectedItems.Clear() ' deselect existing items
         lstPrograms.Items.Add(tmpListViewItem).Selected = True
         tmpListViewItem.Focused = True
@@ -149,8 +149,8 @@ Public Class ProgramLauncher
         If isProgramEditor Then
             Dim inputBoxText As String
             For Each item As ListViewItem In lstPrograms.SelectedItems
-                inputBoxText = InputBox("Enter the arguments to start """ & item.Text & """ with:", "", item.SubItems.Item(1).Text)
-                If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
+                inputBoxText = InputBox("Enter the arguments to start """ & item.SubItems.Item(1).Text & """ with:", "", item.SubItems.Item(2).Text)
+                If inputBoxText <> "" Then item.SubItems.Item(2).Text = inputBoxText
             Next
             WriteConfig(configFilePath)
         Else
@@ -163,19 +163,19 @@ Public Class ProgramLauncher
     Private Sub Browse() Handles btnBrowse.Click
         If lstPrograms.SelectedItems.Count > 1 Then
             For Each item As ListViewItem In lstPrograms.SelectedItems
-                openFileDialogBrowse.Title = "Select file to replace """ & item.Text & """ with:"
-                If item.Text.Contains(Path.DirectorySeparatorChar) Then
-                    openFileDialogBrowse.InitialDirectory = Path.GetDirectoryName(item.Text)
+                openFileDialogBrowse.Title = "Select file to replace """ & item.SubItems.Item(1).Text & """ with:"
+                If item.SubItems.Item(1).Text.Contains(Path.DirectorySeparatorChar) Then
+                    openFileDialogBrowse.InitialDirectory = Path.GetDirectoryName(item.SubItems.Item(1).Text)
                 Else
                     openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
                 End If
                 If openFileDialogBrowse.ShowDialog() = DialogResult.OK Then
-                    item.Text = openFileDialogBrowse.FileName
+                    item.SubItems.Item(1).Text = openFileDialogBrowse.FileName
                 End If
             Next
             WriteConfig(configFilePath)
         Else
-            Dim selectedItemPath = lstPrograms.SelectedItems(0).Text
+            Dim selectedItemPath = lstPrograms.SelectedItems(0).SubItems.Item(1).Text
             openFileDialogBrowse.Title = "Select file to replace """ & selectedItemPath & """ with:"
             If selectedItemPath.Contains(Path.DirectorySeparatorChar) Then
                 openFileDialogBrowse.InitialDirectory = Path.GetDirectoryName(selectedItemPath)
@@ -183,7 +183,7 @@ Public Class ProgramLauncher
                 openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
             End If
             If openFileDialogBrowse.ShowDialog() = DialogResult.OK Then
-                lstPrograms.SelectedItems(0).Text = openFileDialogBrowse.FileName
+                lstPrograms.SelectedItems(0).SubItems.Item(1).Text = openFileDialogBrowse.FileName
                 WriteConfig(configFilePath)
             End If
         End If
@@ -207,8 +207,8 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
-        Dim programPath As String = entry.Text
-        Dim programArgs As String = entry.SubItems.Item(1).Text
+        Dim programPath As String = entry.SubItems.Item(1).Text
+        Dim programArgs As String = entry.SubItems.Item(2).Text
         programPath = Environment.ExpandEnvironmentVariables(programPath)
         programArgs = Environment.ExpandEnvironmentVariables(programArgs)
         If programArgs.Contains("{0}") Then
@@ -225,8 +225,8 @@ Public Class ProgramLauncher
                     Process.Start(programPath & programArgs)
                 ElseIf programPath.StartsWith("elevate ") Or programPath.StartsWith("sudo ") Or programPath.StartsWith("runas ") Then
                     If programPath.StartsWith("elevate ") Then programPath = programPath.Substring(8)
-                    If programPath.StartsWith("sudo ") Then programPath = programPath.Substring(5)
-                    If programPath.StartsWith("runas ") Then programPath = programPath.Substring(6)
+                    If programPath.StartsWith("sudo ")    Then programPath = programPath.Substring(5)
+                    If programPath.StartsWith("runas ")   Then programPath = programPath.Substring(6)
                     
                     WalkmanLib.RunAsAdmin(programPath, programArgs)
                 Else
@@ -314,14 +314,14 @@ Public Class ProgramLauncher
     
     Private Sub lstPrograms_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
         If e.Data.GetDataPresent(DataFormats.Text) Then
-            Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " "})
+            Dim tmpListViewItem As New ListViewItem(New String() {"", e.Data.GetData(DataFormats.Text).ToString, " "})
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             lstPrograms.Items.Add(tmpListViewItem).Selected = True
             tmpListViewItem.Focused = True
         ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) AndAlso TypeOf(e.Data.GetData(DataFormats.FileDrop)) Is String() Then
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             For Each filePath In DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
-                Dim tmpListViewItem As New ListViewItem((New String() {filePath, " "}))
+                Dim tmpListViewItem As New ListViewItem((New String() {"", filePath, " "}))
                 lstPrograms.Items.Add(tmpListViewItem).Selected = True
                 tmpListViewItem.Focused = True
             Next
@@ -329,23 +329,23 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub LoadInitialList()
-        Dim item1 = New String() {"%WinDir%\explorer.exe", """{0}"""}
-        Dim item2 = New String() {"%WinDir%\explorer.exe", "/select, ""{0}"""}
-        Dim item3 = New String() {"%WinDir%\notepad.exe", """{0}"""}
-        Dim item4 = New String() {"elevate %WinDir%\notepad.exe", """{0}"""}
-        Dim item5 = New String() {"%WinDir%\System32\cmd.exe", "/k cd /d ""{0}"""}
-        Dim item6 = New String() {"Copy to Clipboard", "{0}"}
-        Dim item7 = New String() {"microsoft-edge:", "{0}"}
-        Dim item8 = New String() {"%ProgramFiles%\WalkmanOSS\BasicBrowser.exe", """{0}"""}
-        Dim item9 = New String() {"%ProgramFiles%\WalkmanOSS\DirectoryImage.exe", """{0}"""}
-        Dim item10 = New String() {"%ProgramFiles%\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
+        Dim item1 = New String() {"Open in Explorer", "%WinDir%\explorer.exe", """{0}"""}
+        Dim item2 = New String() {"Show in Explorer", "%WinDir%\explorer.exe", "/select, ""{0}"""}
+        Dim item3 = New String() {"Notepad", "%WinDir%\notepad.exe", """{0}"""}
+        Dim item4 = New String() {"Notepad (Admin)", "elevate %WinDir%\notepad.exe", """{0}"""}
+        Dim item5 = New String() {"Open CMD at path", "%WinDir%\System32\cmd.exe", "/k cd /d ""{0}"""}
+        Dim item6 = New String() {"Copy to Clipboard", "Copy to Clipboard", "{0}"}
+        Dim item7 = New String() {"Microsoft Edge", "microsoft-edge:", "{0}"}
+        Dim item8 = New String() {"BasicBrowser", "%ProgramFiles%\WalkmanOSS\BasicBrowser.exe", """{0}"""}
+        Dim item9 = New String() {"DirectoryImage", "%ProgramFiles%\WalkmanOSS\DirectoryImage.exe", """{0}"""}
+        Dim item10 = New String() {"PropertiesDotNet", "%ProgramFiles%\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
         For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10}
             lstPrograms.Items.Add(New ListViewItem(item))
         Next
         
         'Me.Height = 240 (disabled because the default form size is big enough)
-        colheadPath.Width = 292
-        colheadProgramArgs.Width = 151
+        'colheadPath.Width = 292
+        'colheadProgramArgs.Width = 151
     End Sub
     
     Private Sub ReadConfig(path As String)
@@ -362,16 +362,21 @@ Public Class ProgramLauncher
             If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ProgramList" Then
                 While reader.IsStartElement
                     If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Program" Then
-                        Dim tmpListViewItem As New ListViewItem(New String() {"notepad", """{0}"""})
+                        Dim tmpListViewItem As New ListViewItem(New String() {"Notepad", "notepad", """{0}"""})
                         
-                        elementAttribute = reader("path")
+                        elementAttribute = reader("name")
                         If elementAttribute IsNot Nothing Then
                             tmpListViewItem.Text = elementAttribute
                         End If
                         
-                        elementAttribute = reader("args")
+                        elementAttribute = reader("path")
                         If elementAttribute IsNot Nothing Then
                             tmpListViewItem.SubItems.Item(1).Text = elementAttribute
+                        End If
+                        
+                        elementAttribute = reader("args")
+                        If elementAttribute IsNot Nothing Then
+                            tmpListViewItem.SubItems.Item(2).Text = elementAttribute
                         End If
                         
                         lstPrograms.Items.Add(tmpListViewItem)
@@ -382,7 +387,17 @@ Public Class ProgramLauncher
                 If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ColumnSettings" Then
                     While reader.IsStartElement
                         If reader.Read AndAlso reader.IsStartElement() Then
-                            If reader.Name = "PathColumn" Then
+                            If reader.Name = "NameColumn" Then
+                                elementAttribute = reader("index")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadName.DisplayIndex = elementAttribute
+                                End If
+                                
+                                elementAttribute = reader("width")
+                                If elementAttribute IsNot Nothing Then
+                                    colheadName.Width = elementAttribute
+                                End If
+                            ElseIf reader.Name = "PathColumn" Then
                                 elementAttribute = reader("index")
                                 If elementAttribute IsNot Nothing Then
                                     colheadPath.DisplayIndex = elementAttribute
@@ -445,14 +460,19 @@ Public Class ProgramLauncher
             writer.WriteStartElement("ProgramList")
             For Each item In lstPrograms.Items
                 writer.WriteStartElement("Program")
-                writer.WriteAttributeString("path", item.Text)
-                writer.WriteAttributeString("args", item.SubItems.Item(1).Text)
+                writer.WriteAttributeString("name", item.Text)
+                writer.WriteAttributeString("path", item.SubItems.Item(1).Text)
+                writer.WriteAttributeString("args", item.SubItems.Item(2).Text)
                 writer.WriteEndElement()
             Next
             writer.WriteEndElement()
             
             writer.WriteStartElement("Settings")
                 writer.WriteStartElement("ColumnSettings")
+                    writer.WriteStartElement("NameColumn")
+                        writer.WriteAttributeString("index", colheadName.DisplayIndex)
+                        writer.WriteAttributeString("width", colheadName.Width)
+                    writer.WriteEndElement()
                     writer.WriteStartElement("PathColumn")
                         writer.WriteAttributeString("index", colheadPath.DisplayIndex)
                         writer.WriteAttributeString("width", colheadPath.Width)
