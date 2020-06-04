@@ -1,3 +1,4 @@
+Imports System.Linq
 Imports System.Runtime.CompilerServices
 Public Class ProgramLauncher
     
@@ -88,20 +89,21 @@ Public Class ProgramLauncher
         Try
             If lstPrograms.SelectedItems.Count > 0 Then
                 lstPrograms.Sorting = SortOrder.None
-                Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
-                Dim selectedIndex As Integer = selected.Index
+                lstPrograms.BeginUpdate()
                 Dim totalItems As Integer = lstPrograms.Items.Count
                 
-                lstPrograms.BeginUpdate()
-                If selectedIndex = 0 Then
-                    lstPrograms.Items.Remove(selected)
-                    lstPrograms.Items.Insert(totalItems - 1, selected)
-                Else
-                    lstPrograms.Items.Remove(selected)
-                    lstPrograms.Items.Insert(selectedIndex - 1, selected)
-                End If
-                lstPrograms.EndUpdate()
+                For Each selectedItem As ListViewItem In lstPrograms.SelectedItems
+                    Dim itemIndex As Integer = selectedItem.Index
+                    If itemIndex = 0 Then
+                        lstPrograms.Items.Remove(selectedItem)
+                        lstPrograms.Items.Insert(totalItems - 1, selectedItem)
+                    Else
+                        lstPrograms.Items.Remove(selectedItem)
+                        lstPrograms.Items.Insert(itemIndex - 1, selectedItem)
+                    End If
+                Next
                 
+                lstPrograms.EndUpdate()
                 CheckButtons(True)
             Else
                 btnMoveUp.Enabled = False
@@ -115,20 +117,25 @@ Public Class ProgramLauncher
         Try
             If lstPrograms.SelectedItems.Count > 0 Then
                 lstPrograms.Sorting = SortOrder.None
-                Dim selected As ListViewItem = lstPrograms.SelectedItems(0)
-                Dim selectedIndex As Integer = selected.Index
+                lstPrograms.BeginUpdate()
                 Dim totalItems As Integer = lstPrograms.Items.Count
                 
-                lstPrograms.BeginUpdate()
-                If selectedIndex = totalItems - 1 Then
-                    lstPrograms.Items.Remove(selected)
-                    lstPrograms.Items.Insert(0, selected)
-                Else
-                    lstPrograms.Items.Remove(selected)
-                    lstPrograms.Items.Insert(selectedIndex + 1, selected)
-                End If
-                lstPrograms.EndUpdate()
+                                        ' VB.Net declares arrays Index-based... (0 = 1 item)
+                Dim selectedItemArray(lstPrograms.SelectedItems.Count - 1) As ListViewItem
+                lstPrograms.SelectedItems.CopyTo(selectedItemArray, 0)
                 
+                For Each selectedItem As ListViewItem In selectedItemArray.Reverse()
+                    Dim itemIndex As Integer = selectedItem.Index
+                    If itemIndex = totalItems - 1 Then
+                        lstPrograms.Items.Remove(selectedItem)
+                        lstPrograms.Items.Insert(0, selectedItem)
+                    Else
+                        lstPrograms.Items.Remove(selectedItem)
+                        lstPrograms.Items.Insert(itemIndex + 1, selectedItem)
+                    End If
+                Next
+                
+                lstPrograms.EndUpdate()
                 CheckButtons(True)
             Else
                 btnMoveDown.Enabled = False
