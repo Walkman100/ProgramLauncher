@@ -148,18 +148,13 @@ Public Class ProgramLauncher
     Private Sub btnEdit_Click() Handles btnEdit.Click
         If isProgramEditor Then
             Dim inputBoxText As String
-            If lstPrograms.SelectedItems.Count > 1 Then
-                For Each item As ListViewItem In lstPrograms.SelectedItems
-                    inputBoxText = InputBox("Enter the arguments to start """ & item.Text & """ with:", "", item.SubItems.Item(1).Text)
-                    If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
-                Next
-            Else
-                inputBoxText = InputBox("Enter the arguments to start """ & lstPrograms.SelectedItems(0).Text & """ with:", "", lstPrograms.SelectedItems(0).SubItems.Item(1).Text)
-                If inputBoxText <> "" Then lstPrograms.SelectedItems(0).SubItems.Item(1).Text = inputBoxText
-            End If
+            For Each item As ListViewItem In lstPrograms.SelectedItems
+                inputBoxText = InputBox("Enter the arguments to start """ & item.Text & """ with:", "", item.SubItems.Item(1).Text)
+                If inputBoxText <> "" Then item.SubItems.Item(1).Text = inputBoxText
+            Next
             WriteConfig(configFilePath)
         Else
-            Shell(Application.StartupPath & Path.DirectorySeparatorChar & Process.GetCurrentProcess.ProcessName & ".exe", AppWinStyle.NormalFocus, True, 100000)
+            Shell(Path.Combine(Application.StartupPath, Process.GetCurrentProcess.ProcessName & ".exe"), AppWinStyle.NormalFocus, True, 100000)
             lstPrograms.Items.Clear()
             ReadConfig(configFilePath)
         End If
@@ -170,7 +165,7 @@ Public Class ProgramLauncher
             For Each item As ListViewItem In lstPrograms.SelectedItems
                 openFileDialogBrowse.Title = "Select file to replace """ & item.Text & """ with:"
                 If item.Text.Contains(Path.DirectorySeparatorChar) Then
-                    openFileDialogBrowse.InitialDirectory = item.Text.Remove(item.Text.LastIndexOf(Path.DirectorySeparatorChar))
+                    openFileDialogBrowse.InitialDirectory = Path.GetDirectoryName(item.Text)
                 Else
                     openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
                 End If
@@ -183,7 +178,7 @@ Public Class ProgramLauncher
             Dim selectedItemPath = lstPrograms.SelectedItems(0).Text
             openFileDialogBrowse.Title = "Select file to replace """ & selectedItemPath & """ with:"
             If selectedItemPath.Contains(Path.DirectorySeparatorChar) Then
-                openFileDialogBrowse.InitialDirectory = selectedItemPath.Remove(selectedItemPath.LastIndexOf(Path.DirectorySeparatorChar))
+                openFileDialogBrowse.InitialDirectory = Path.GetDirectoryName(selectedItemPath)
             Else
                 openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
             End If
@@ -196,13 +191,9 @@ Public Class ProgramLauncher
     
     Private Sub RunSelectedEntry(sender As Object, e As EventArgs) Handles btnRun.Click, btnOpenOnly.Click
         If isProgramEditor Then
-            If lstPrograms.SelectedItems.Count > 1 Then
-                For Each item As ListViewItem In lstPrograms.SelectedItems
-                    RunProgram(item)
-                Next
-            Else
-                RunProgram(lstPrograms.SelectedItems(0))
-            End If
+            For Each item As ListViewItem In lstPrograms.SelectedItems
+                RunProgram(item)
+            Next
         Else
             RunProgram(lstPrograms.SelectedItems(0), fullArgument)
             If sender.Equals(btnRun) Then CloseProgramLauncher()
