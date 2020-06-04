@@ -76,10 +76,10 @@ Public Class ProgramLauncher
     Private Sub RemoveItem() Handles btnRemove.Click
         If lstPrograms.SelectedItems.Count > 1 Then
             For Each item As ListViewItem In lstPrograms.SelectedItems
-                item.Remove
+                item.Remove()
             Next
         Else
-            lstPrograms.SelectedItems(0).Remove
+            lstPrograms.SelectedItems(0).Remove()
         End If
         CheckButtons(True)
     End Sub
@@ -198,7 +198,7 @@ Public Class ProgramLauncher
             End If
         Else
             RunProgram(lstPrograms.SelectedItems(0), fullArgument)
-            If sender.Equals(btnRun) Then CloseProgramLauncher
+            If sender.Equals(btnRun) Then CloseProgramLauncher()
         End If
     End Sub
     
@@ -213,7 +213,7 @@ Public Class ProgramLauncher
             If entry.SubItems.Item(1).Text.Contains("{0}") Then
                 WalkmanLib.SafeSetText(String.Format(entry.SubItems.Item(1).Text, argument))
             Else
-                WalkmanLib.SafeSetText(entry.SubItems.Item(1).Text & argument)
+                WalkmanLib.SafeSetText(String.Concat(entry.SubItems.Item(1).Text, argument))
             End If
             
             Exit Sub
@@ -224,7 +224,7 @@ Public Class ProgramLauncher
                 If entry.SubItems.Item(1).Text.Contains("{0}") Then
                     Process.Start(entry.Text & String.Format(entry.SubItems.Item(1).Text, argument))
                 Else
-                    Process.Start(entry.Text &               entry.SubItems.Item(1).Text & argument)
+                    Process.Start(entry.Text & String.Concat(entry.SubItems.Item(1).Text, argument))
                 End If
                 
                 Exit Sub
@@ -239,7 +239,7 @@ Public Class ProgramLauncher
                 If entry.SubItems.Item(1).Text.Contains("{0}") Then
                     WalkmanLib.RunAsAdmin(programString, String.Format(entry.SubItems.Item(1).Text, argument))
                 Else
-                    WalkmanLib.RunAsAdmin(programString,               entry.SubItems.Item(1).Text & argument)
+                    WalkmanLib.RunAsAdmin(programString, String.Concat(entry.SubItems.Item(1).Text, argument))
                 End If
                 
                 Exit Sub
@@ -248,7 +248,7 @@ Public Class ProgramLauncher
             If entry.SubItems.Item(1).Text.Contains("{0}") Then
                 Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
             Else
-                Process.Start(entry.Text,               entry.SubItems.Item(1).Text & argument)
+                Process.Start(entry.Text, String.Concat(entry.SubItems.Item(1).Text & argument))
             End If
         Catch ex As Exception
             Try
@@ -265,7 +265,7 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub lstPrograms_ItemSelectionChanged() Handles lstPrograms.ItemSelectionChanged
-        CheckButtons
+        CheckButtons()
     End Sub
     Private Sub lstPrograms_ListDataEdited() Handles lstPrograms.AfterLabelEdit, lstPrograms.ColumnReordered
         CheckButtons(True)
@@ -287,8 +287,8 @@ Public Class ProgramLauncher
         Else
             If isProgramEditor Then
                 btnRemove.Enabled = True
-                btnMoveDown.Enabled = (lstPrograms.SelectedItems(0).Index <> lstPrograms.Items.Count -1)
-                btnMoveUp.Enabled = (lstPrograms.SelectedItems(0).Index <> 0)
+                btnMoveDown.Enabled = True
+                btnMoveUp.Enabled = True
                 btnEdit.Enabled = True
                 btnBrowse.Enabled = True
                 btnRun.Enabled = True
@@ -338,7 +338,7 @@ Public Class ProgramLauncher
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             lstPrograms.Items.Add(tmpListViewItem).Selected = True
             tmpListViewItem.Focused = True
-        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop)
+        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             For i = 0 To Integer.MaxValue
                 If (e.Data.GetData(DataFormats.FileDrop)(i) <> Nothing) Then
@@ -377,7 +377,7 @@ Public Class ProgramLauncher
         Try
             reader.Read()
         Catch ex As XmlException
-            reader.Close
+            reader.Close()
             Exit Sub
         End Try
         
@@ -416,7 +416,7 @@ Public Class ProgramLauncher
                                 If elementAttribute IsNot Nothing Then
                                     colheadPath.Width = elementAttribute
                                 End If
-                            ElseIf reader.Name = "ArgColumn"
+                            ElseIf reader.Name = "ArgColumn" Then
                                 elementAttribute = reader("index")
                                 If elementAttribute IsNot Nothing Then
                                     colheadProgramArgs.DisplayIndex = elementAttribute
@@ -436,7 +436,7 @@ Public Class ProgramLauncher
                         If isProgramEditor Then
                             Me.Width = elementAttribute
                         Else
-                            Me.Width = elementAttribute -67
+                            Me.Width = elementAttribute - 67
                         End If
                         Me.Location = New Drawing.Point(My.Computer.Screen.WorkingArea.Width/2 - Me.Width/2, Me.Location.Y)
                     End If
@@ -446,7 +446,7 @@ Public Class ProgramLauncher
                         If isProgramEditor Then
                             Me.Height = elementAttribute
                         Else
-                            Me.Height = elementAttribute +29
+                            Me.Height = elementAttribute + 29
                         End If
                         Me.Location = New Drawing.Point(Me.Location.X, My.Computer.Screen.WorkingArea.Height/2 - Me.Height/2)
                     End If
@@ -454,7 +454,7 @@ Public Class ProgramLauncher
             End If
         End If
         
-        reader.Close
+        reader.Close()
     End Sub
     
     Private Sub WriteConfig(path As String)
