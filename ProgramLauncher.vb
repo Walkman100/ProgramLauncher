@@ -152,7 +152,7 @@ Public Class ProgramLauncher
             End If
             WriteConfig(configFilePath)
         Else
-            Shell(Application.StartupPath & "\" & Process.GetCurrentProcess.ProcessName & ".exe", AppWinStyle.NormalFocus, True, 100000)
+            Shell(Application.StartupPath & Path.DirectorySeparatorChar & Process.GetCurrentProcess.ProcessName & ".exe", AppWinStyle.NormalFocus, True, 100000)
             lstPrograms.Items.Clear()
             ReadConfig(configFilePath)
         End If
@@ -162,8 +162,8 @@ Public Class ProgramLauncher
         If lstPrograms.SelectedItems.Count > 1 Then
             For Each item As ListViewItem In lstPrograms.SelectedItems
                 openFileDialogBrowse.Title = "Select file to replace """ & item.Text & """ with:"
-                If item.Text.Contains("\") Then
-                    openFileDialogBrowse.InitialDirectory = item.Text.Remove(item.Text.LastIndexOf("\"))
+                If item.Text.Contains(Path.DirectorySeparatorChar) Then
+                    openFileDialogBrowse.InitialDirectory = item.Text.Remove(item.Text.LastIndexOf(Path.DirectorySeparatorChar))
                 Else
                     openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
                 End If
@@ -173,9 +173,10 @@ Public Class ProgramLauncher
             Next
             WriteConfig(configFilePath)
         Else
-            openFileDialogBrowse.Title = "Select file to replace """ & lstPrograms.SelectedItems(0).Text & """ with:"
-            If lstPrograms.SelectedItems(0).Text.Contains("\") Then
-                openFileDialogBrowse.InitialDirectory = lstPrograms.SelectedItems(0).Text.Remove(lstPrograms.SelectedItems(0).Text.LastIndexOf("\"))
+            Dim selectedItemPath = lstPrograms.SelectedItems(0).Text
+            openFileDialogBrowse.Title = "Select file to replace """ & selectedItemPath & """ with:"
+            If selectedItemPath.Contains(Path.DirectorySeparatorChar) Then
+                openFileDialogBrowse.InitialDirectory = selectedItemPath.Remove(selectedItemPath.LastIndexOf(Path.DirectorySeparatorChar))
             Else
                 openFileDialogBrowse.InitialDirectory = Environment.GetEnvironmentVariable("ProgramFiles")
             End If
@@ -201,7 +202,7 @@ Public Class ProgramLauncher
         End If
     End Sub
     
-    Sub lstPrograms_DoubleClick(sender As Object, e As EventArgs) Handles lstPrograms.DoubleClick
+    Sub lstPrograms_ItemActivate(sender As Object, e As EventArgs) Handles lstPrograms.ItemActivate
         If lstPrograms.SelectedItems.Count > 0 Then
             RunSelectedEntry(btnRun, e)
         End If
@@ -357,7 +358,7 @@ Public Class ProgramLauncher
         Dim item3 = New String() {"C:\Windows\notepad.exe", """{0}"""}
         Dim item4 = New String() {"elevate C:\Windows\notepad.exe", """{0}"""}
         Dim item5 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
-        Dim item6 = New String() {"Copy to Clipboard", """{0}"""}
+        Dim item6 = New String() {"Copy to Clipboard", "{0}"}
         Dim item7 = New String() {"microsoft-edge:", "{0}"}
         Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
         Dim item9 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
