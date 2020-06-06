@@ -207,53 +207,40 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub RunProgram(entry As ListViewItem, Optional argument As String = "")
-        If entry.Text = "Copy to Clipboard" Then
-            If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                WalkmanLib.SafeSetText(String.Format(entry.SubItems.Item(1).Text, argument))
-            Else
-                WalkmanLib.SafeSetText(String.Concat(entry.SubItems.Item(1).Text, argument))
-            End If
-            
+        Dim programPath As String = entry.Text
+        Dim programArgs As String = entry.SubItems.Item(1).Text
+        programPath = Environment.ExpandEnvironmentVariables(programPath)
+        programArgs = Environment.ExpandEnvironmentVariables(programArgs)
+        If programArgs.Contains("{0}") Then
+            programArgs = String.Format(programArgs, argument)
+        Else
+            programArgs = String.Concat(programArgs, argument)
+        End If
+        
+        If programPath = "Copy to Clipboard" Then
+            WalkmanLib.SafeSetText(programArgs)
             Exit Sub
         End If
         
         Try
-            If entry.Text.EndsWith(":") Then ' launching a protocol is a bit different
-                If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                    Process.Start(entry.Text & String.Format(entry.SubItems.Item(1).Text, argument))
-                Else
-                    Process.Start(entry.Text & String.Concat(entry.SubItems.Item(1).Text, argument))
-                End If
-                
+            If programPath.EndsWith(":") Then ' launching a protocol is a bit different
+                Process.Start(programPath & programArgs)
                 Exit Sub
             End If
             
-            If entry.Text.StartsWith("elevate ") Or entry.Text.StartsWith("sudo ") Or entry.Text.StartsWith("runas ") Then
-                Dim programString As String = ""
-                If entry.Text.StartsWith("elevate ") Then programString = entry.Text.Substring(8)
-                If entry.Text.StartsWith("sudo ") Then programString = entry.Text.Substring(5)
-                If entry.Text.StartsWith("runas ") Then programString = entry.Text.Substring(6)
+            If programPath.StartsWith("elevate ") Or programPath.StartsWith("sudo ") Or programPath.StartsWith("runas ") Then
+                If programPath.StartsWith("elevate ") Then programPath = programPath.Substring(8)
+                If programPath.StartsWith("sudo ") Then programPath = programPath.Substring(5)
+                If programPath.StartsWith("runas ") Then programPath = programPath.Substring(6)
                 
-                If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                    WalkmanLib.RunAsAdmin(programString, String.Format(entry.SubItems.Item(1).Text, argument))
-                Else
-                    WalkmanLib.RunAsAdmin(programString, String.Concat(entry.SubItems.Item(1).Text, argument))
-                End If
-                
+                WalkmanLib.RunAsAdmin(programPath, programArgs)
                 Exit Sub
             End If
             
-            If entry.SubItems.Item(1).Text.Contains("{0}") Then
-                Process.Start(entry.Text, String.Format(entry.SubItems.Item(1).Text, argument))
-            Else
-                Process.Start(entry.Text, String.Concat(entry.SubItems.Item(1).Text & argument))
-            End If
+            Process.Start(programPath, programArgs)
         Catch ex As Exception
-            Try
-                MsgBox("There was an error running the program """ & entry.Text & """ with """ & entry.SubItems.Item(1).Text & """ args!", MsgBoxStyle.Critical)
-            Catch ex2 As Exception
-                MsgBox("Error finding the data to run the program! Error was:" & vbNewLine & ex2.Message, MsgBoxStyle.Critical)
-            End Try
+            MsgBox("There was an error running the program """ & programPath & """ with """ & programArgs & """ args:" &
+                vbNewLine & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
     
