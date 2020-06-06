@@ -221,7 +221,7 @@
         Me.lblInstructions.Name = "lblInstructions"
         Me.lblInstructions.Size = New System.Drawing.Size(450, 13)
         Me.lblInstructions.TabIndex = 9
-        Me.lblInstructions.Text = """{0}"" Will be replaced with the argument. You can use ""Copy to Clipboard"" as a program path."
+        Me.lblInstructions.Text = """{0}"" will be replaced with the argument. You can use ""Copy to Clipboard"" as a program path."
         '
         'btnMoveUp
         '

@@ -219,29 +219,24 @@ Public Class ProgramLauncher
         
         If programPath = "Copy to Clipboard" Then
             WalkmanLib.SafeSetText(programArgs)
-            Exit Sub
+        Else
+            Try
+                If programPath.EndsWith(":") Then ' launching a protocol is a bit different
+                    Process.Start(programPath & programArgs)
+                ElseIf programPath.StartsWith("elevate ") Or programPath.StartsWith("sudo ") Or programPath.StartsWith("runas ") Then
+                    If programPath.StartsWith("elevate ") Then programPath = programPath.Substring(8)
+                    If programPath.StartsWith("sudo ") Then programPath = programPath.Substring(5)
+                    If programPath.StartsWith("runas ") Then programPath = programPath.Substring(6)
+                    
+                    WalkmanLib.RunAsAdmin(programPath, programArgs)
+                Else
+                    Process.Start(programPath, programArgs)
+                End If
+            Catch ex As Exception
+                MsgBox("There was an error running the program """ & programPath & """ with """ & programArgs & """ args:" &
+                    vbNewLine & ex.Message, MsgBoxStyle.Critical)
+            End Try
         End If
-        
-        Try
-            If programPath.EndsWith(":") Then ' launching a protocol is a bit different
-                Process.Start(programPath & programArgs)
-                Exit Sub
-            End If
-            
-            If programPath.StartsWith("elevate ") Or programPath.StartsWith("sudo ") Or programPath.StartsWith("runas ") Then
-                If programPath.StartsWith("elevate ") Then programPath = programPath.Substring(8)
-                If programPath.StartsWith("sudo ") Then programPath = programPath.Substring(5)
-                If programPath.StartsWith("runas ") Then programPath = programPath.Substring(6)
-                
-                WalkmanLib.RunAsAdmin(programPath, programArgs)
-                Exit Sub
-            End If
-            
-            Process.Start(programPath, programArgs)
-        Catch ex As Exception
-            MsgBox("There was an error running the program """ & programPath & """ with """ & programArgs & """ args:" &
-                vbNewLine & ex.Message, MsgBoxStyle.Critical)
-        End Try
     End Sub
     
     Private Sub CloseProgramLauncher() Handles btnEnd.Click
@@ -338,16 +333,16 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub LoadInitialList()
-        Dim item1 = New String() {"C:\Windows\explorer.exe", """{0}"""}
-        Dim item2 = New String() {"C:\Windows\explorer.exe", "/select, ""{0}"""}
-        Dim item3 = New String() {"C:\Windows\notepad.exe", """{0}"""}
-        Dim item4 = New String() {"elevate C:\Windows\notepad.exe", """{0}"""}
-        Dim item5 = New String() {"C:\Windows\System32\cmd.exe", "/k cd /d ""{0}"""}
+        Dim item1 = New String() {"%WinDir%\explorer.exe", """{0}"""}
+        Dim item2 = New String() {"%WinDir%\explorer.exe", "/select, ""{0}"""}
+        Dim item3 = New String() {"%WinDir%\notepad.exe", """{0}"""}
+        Dim item4 = New String() {"elevate %WinDir%\notepad.exe", """{0}"""}
+        Dim item5 = New String() {"%WinDir%\System32\cmd.exe", "/k cd /d ""{0}"""}
         Dim item6 = New String() {"Copy to Clipboard", "{0}"}
         Dim item7 = New String() {"microsoft-edge:", "{0}"}
-        Dim item8 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\BasicBrowser.exe", """{0}"""}
-        Dim item9 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\DirectoryImage.exe", """{0}"""}
-        Dim item10 = New String() {Environment.GetEnvironmentVariable("ProgramFiles") & "\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
+        Dim item8 = New String() {"%ProgramFiles%\WalkmanOSS\BasicBrowser.exe", """{0}"""}
+        Dim item9 = New String() {"%ProgramFiles%\WalkmanOSS\DirectoryImage.exe", """{0}"""}
+        Dim item10 = New String() {"%ProgramFiles%\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
         For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10}
             lstPrograms.Items.Add(New ListViewItem(item))
         Next
