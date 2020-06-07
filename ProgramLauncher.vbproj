@@ -62,9 +62,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WalkmanLib\WalkmanLibDotNet.vb">
-      <Link>WalkmanLibDotNet.vb</Link>
-    </Compile>
+    <Compile Include="WalkmanLib\WalkmanLibDotNet.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -89,6 +87,9 @@
     <Import Include="System.IO" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WalkmanLib" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
