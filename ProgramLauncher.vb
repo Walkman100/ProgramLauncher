@@ -314,20 +314,16 @@ Public Class ProgramLauncher
     
     Private Sub lstPrograms_DragDrop(sender As Object, e As DragEventArgs) Handles lstPrograms.DragDrop
         If e.Data.GetDataPresent(DataFormats.Text) Then
-            Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " ", "draggedFile"})
+            Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.Text).ToString, " "})
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             lstPrograms.Items.Add(tmpListViewItem).Selected = True
             tmpListViewItem.Focused = True
-        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
+        ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) AndAlso TypeOf(e.Data.GetData(DataFormats.FileDrop)) Is String() Then
             lstPrograms.SelectedItems.Clear() ' deselect existing items
-            For i = 0 To Integer.MaxValue
-                If (e.Data.GetData(DataFormats.FileDrop)(i) <> Nothing) Then
-                    Dim tmpListViewItem As New ListViewItem(New String() {e.Data.GetData(DataFormats.FileDrop)(i), " ", "draggedFile"})
-                    lstPrograms.Items.Add(tmpListViewItem).Selected = True
-                    tmpListViewItem.Focused = True
-                Else
-                    Exit For
-                End If
+            For Each filePath In DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
+                Dim tmpListViewItem As New ListViewItem((New String() {filePath, " "}))
+                lstPrograms.Items.Add(tmpListViewItem).Selected = True
+                tmpListViewItem.Focused = True
             Next
         End If
     End Sub
