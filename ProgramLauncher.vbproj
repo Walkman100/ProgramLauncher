@@ -17,7 +17,7 @@
     <DefineTrace>true</DefineTrace>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <BaseAddress>4194304</BaseAddress>
-    <Prefer32Bit>True</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <ApplicationIcon>My Project\1458111143_open.ico</ApplicationIcon>
     <ApplicationManifest>My Project\App.manifest</ApplicationManifest>
