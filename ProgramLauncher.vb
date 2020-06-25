@@ -288,11 +288,11 @@ Public Class ProgramLauncher
         End If
     End Sub
     
-    Private Sub ResizeByHeader(sender As Object, e As EventArgs) Handles contextCommandsResizePathHeader.Click, contextCommandsResizeArgsHeader.Click
+    Private Sub ResizeByHeader(sender As Object, e As EventArgs) Handles contextCommandsResizeNameHeader.Click, contextCommandsResizePathHeader.Click, contextCommandsResizeArgsHeader.Click
         lstPrograms.AutoResizeColumn(sender.Tag, ColumnHeaderAutoResizeStyle.HeaderSize)
     End Sub
     
-    Private Sub ResizeByContent(sender As Object, e As EventArgs) Handles contextCommandsResizePathContent.Click, contextCommandsResizeArgsContent.Click
+    Private Sub ResizeByContent(sender As Object, e As EventArgs) Handles contextCommandsResizeNameContent.Click, contextCommandsResizePathContent.Click, contextCommandsResizeArgsContent.Click
         lstPrograms.AutoResizeColumn(sender.Tag, ColumnHeaderAutoResizeStyle.ColumnContent)
     End Sub
     
@@ -321,7 +321,7 @@ Public Class ProgramLauncher
         ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) AndAlso TypeOf(e.Data.GetData(DataFormats.FileDrop)) Is String() Then
             lstPrograms.SelectedItems.Clear() ' deselect existing items
             For Each filePath In DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
-                Dim tmpListViewItem As New ListViewItem((New String() {"", filePath, " "}))
+                Dim tmpListViewItem As New ListViewItem(New String() {"", filePath, " "})
                 lstPrograms.Items.Add(tmpListViewItem).Selected = True
                 tmpListViewItem.Focused = True
             Next

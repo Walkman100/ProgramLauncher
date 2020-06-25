@@ -39,10 +39,10 @@
         Me.contextCommands = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.contextCommandsResizePathHeader = New System.Windows.Forms.ToolStripMenuItem()
         Me.contextCommandsResizePathContent = New System.Windows.Forms.ToolStripMenuItem()
-        Me.contextCommandsSeperator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.contextCommandsSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.contextCommandsResizeArgsHeader = New System.Windows.Forms.ToolStripMenuItem()
         Me.contextCommandsResizeArgsContent = New System.Windows.Forms.ToolStripMenuItem()
-        Me.contextCommandsSeperator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.contextCommandsSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.contextCommandsResizeAllHeader = New System.Windows.Forms.ToolStripMenuItem()
         Me.contextCommandsResizeAllContent = New System.Windows.Forms.ToolStripMenuItem()
         Me.openFileDialogBrowse = New System.Windows.Forms.OpenFileDialog()
@@ -50,6 +50,9 @@
         Me.btnMoveUp = New System.Windows.Forms.Button()
         Me.btnMoveDown = New System.Windows.Forms.Button()
         Me.lblVersion = New System.Windows.Forms.Label()
+        Me.contextCommandsSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.contextCommandsResizeNameHeader = New System.Windows.Forms.ToolStripMenuItem()
+        Me.contextCommandsResizeNameContent = New System.Windows.Forms.ToolStripMenuItem()
         Me.contextCommands.SuspendLayout
         Me.SuspendLayout
         '
@@ -152,64 +155,64 @@
         '
         'contextCommands
         '
-        Me.contextCommands.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.contextCommandsResizePathHeader, Me.contextCommandsResizePathContent, Me.contextCommandsSeperator1, Me.contextCommandsResizeArgsHeader, Me.contextCommandsResizeArgsContent, Me.contextCommandsSeperator2, Me.contextCommandsResizeAllHeader, Me.contextCommandsResizeAllContent})
+        Me.contextCommands.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.contextCommandsResizeNameHeader, Me.contextCommandsResizeNameContent, Me.contextCommandsSeparator1, Me.contextCommandsResizePathHeader, Me.contextCommandsResizePathContent, Me.contextCommandsSeparator2, Me.contextCommandsResizeArgsHeader, Me.contextCommandsResizeArgsContent, Me.contextCommandsSeparator3, Me.contextCommandsResizeAllHeader, Me.contextCommandsResizeAllContent})
         Me.contextCommands.Name = "contextMenuStripCommands"
-        Me.contextCommands.Size = New System.Drawing.Size(240, 148)
+        Me.contextCommands.Size = New System.Drawing.Size(248, 198)
         '
         'contextCommandsResizePathHeader
         '
         Me.contextCommandsResizePathHeader.AutoToolTip = true
         Me.contextCommandsResizePathHeader.Name = "contextCommandsResizePathHeader"
-        Me.contextCommandsResizePathHeader.Size = New System.Drawing.Size(239, 22)
-        Me.contextCommandsResizePathHeader.Tag = "0"
+        Me.contextCommandsResizePathHeader.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizePathHeader.Tag = "1"
         Me.contextCommandsResizePathHeader.Text = "Resize Path column by Header"
         '
         'contextCommandsResizePathContent
         '
         Me.contextCommandsResizePathContent.AutoToolTip = true
         Me.contextCommandsResizePathContent.Name = "contextCommandsResizePathContent"
-        Me.contextCommandsResizePathContent.Size = New System.Drawing.Size(239, 22)
-        Me.contextCommandsResizePathContent.Tag = "0"
+        Me.contextCommandsResizePathContent.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizePathContent.Tag = "1"
         Me.contextCommandsResizePathContent.Text = "Resize Path column by Content"
         '
-        'contextCommandsSeperator1
+        'contextCommandsSeparator2
         '
-        Me.contextCommandsSeperator1.Name = "contextCommandsSeperator1"
-        Me.contextCommandsSeperator1.Size = New System.Drawing.Size(236, 6)
+        Me.contextCommandsSeparator2.Name = "contextCommandsSeparator2"
+        Me.contextCommandsSeparator2.Size = New System.Drawing.Size(244, 6)
         '
         'contextCommandsResizeArgsHeader
         '
         Me.contextCommandsResizeArgsHeader.AutoToolTip = true
         Me.contextCommandsResizeArgsHeader.Name = "contextCommandsResizeArgsHeader"
-        Me.contextCommandsResizeArgsHeader.Size = New System.Drawing.Size(239, 22)
-        Me.contextCommandsResizeArgsHeader.Tag = "1"
+        Me.contextCommandsResizeArgsHeader.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizeArgsHeader.Tag = "2"
         Me.contextCommandsResizeArgsHeader.Text = "Resize Args column by Header"
         '
         'contextCommandsResizeArgsContent
         '
         Me.contextCommandsResizeArgsContent.AutoToolTip = true
         Me.contextCommandsResizeArgsContent.Name = "contextCommandsResizeArgsContent"
-        Me.contextCommandsResizeArgsContent.Size = New System.Drawing.Size(239, 22)
-        Me.contextCommandsResizeArgsContent.Tag = "1"
+        Me.contextCommandsResizeArgsContent.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizeArgsContent.Tag = "2"
         Me.contextCommandsResizeArgsContent.Text = "Resize Args column by Content"
         '
-        'contextCommandsSeperator2
+        'contextCommandsSeparator3
         '
-        Me.contextCommandsSeperator2.Name = "contextCommandsSeperator2"
-        Me.contextCommandsSeperator2.Size = New System.Drawing.Size(236, 6)
+        Me.contextCommandsSeparator3.Name = "contextCommandsSeparator3"
+        Me.contextCommandsSeparator3.Size = New System.Drawing.Size(244, 6)
         '
         'contextCommandsResizeAllHeader
         '
         Me.contextCommandsResizeAllHeader.AutoToolTip = true
         Me.contextCommandsResizeAllHeader.Name = "contextCommandsResizeAllHeader"
-        Me.contextCommandsResizeAllHeader.Size = New System.Drawing.Size(239, 22)
+        Me.contextCommandsResizeAllHeader.Size = New System.Drawing.Size(247, 22)
         Me.contextCommandsResizeAllHeader.Text = "Resize all by Column Header"
         '
         'contextCommandsResizeAllContent
         '
         Me.contextCommandsResizeAllContent.AutoToolTip = true
         Me.contextCommandsResizeAllContent.Name = "contextCommandsResizeAllContent"
-        Me.contextCommandsResizeAllContent.Size = New System.Drawing.Size(239, 22)
+        Me.contextCommandsResizeAllContent.Size = New System.Drawing.Size(247, 22)
         Me.contextCommandsResizeAllContent.Text = "Resize all by Column Content"
         '
         'openFileDialogBrowse
@@ -225,7 +228,7 @@
         Me.lblInstructions.AutoSize = true
         Me.lblInstructions.Location = New System.Drawing.Point(12, 228)
         Me.lblInstructions.Name = "lblInstructions"
-        Me.lblInstructions.Size = New System.Drawing.Size(450, 13)
+        Me.lblInstructions.Size = New System.Drawing.Size(447, 13)
         Me.lblInstructions.TabIndex = 9
         Me.lblInstructions.Text = """{0}"" will be replaced with the argument. You can use ""Copy to Clipboard"" as a program path."
         '
@@ -260,6 +263,27 @@
         Me.lblVersion.TabIndex = 10
         Me.lblVersion.Text = "1.0.0"
         '
+        'contextCommandsSeparator1
+        '
+        Me.contextCommandsSeparator1.Name = "contextCommandsSeparator1"
+        Me.contextCommandsSeparator1.Size = New System.Drawing.Size(244, 6)
+        '
+        'contextCommandsResizeNameHeader
+        '
+        Me.contextCommandsResizeNameHeader.AutoToolTip = true
+        Me.contextCommandsResizeNameHeader.Name = "contextCommandsResizeNameHeader"
+        Me.contextCommandsResizeNameHeader.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizeNameHeader.Tag = "0"
+        Me.contextCommandsResizeNameHeader.Text = "Resize Name column by Header"
+        '
+        'contextCommandsResizeNameContent
+        '
+        Me.contextCommandsResizeNameContent.AutoToolTip = true
+        Me.contextCommandsResizeNameContent.Name = "contextCommandsResizeNameContent"
+        Me.contextCommandsResizeNameContent.Size = New System.Drawing.Size(247, 22)
+        Me.contextCommandsResizeNameContent.Tag = "0"
+        Me.contextCommandsResizeNameContent.Text = "Resize Name column by Content"
+        '
         'ProgramLauncher
         '
         Me.AcceptButton = Me.btnBrowse
@@ -286,16 +310,19 @@
         Me.ResumeLayout(false)
         Me.PerformLayout
     End Sub
+    Private contextCommandsSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Private WithEvents contextCommandsResizeNameContent As System.Windows.Forms.ToolStripMenuItem
+    Private WithEvents contextCommandsResizeNameHeader As System.Windows.Forms.ToolStripMenuItem
+    Private contextCommandsSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Private contextCommandsSeparator3 As System.Windows.Forms.ToolStripSeparator
     Private colheadName As System.Windows.Forms.ColumnHeader
     Private lblVersion As System.Windows.Forms.Label
     Private WithEvents btnMoveDown As System.Windows.Forms.Button
     Private WithEvents btnMoveUp As System.Windows.Forms.Button
     Private WithEvents contextCommandsResizeAllContent As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents contextCommandsResizeAllHeader As System.Windows.Forms.ToolStripMenuItem
-    Private contextCommandsSeperator2 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents contextCommandsResizeArgsContent As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents contextCommandsResizeArgsHeader As System.Windows.Forms.ToolStripMenuItem
-    Private contextCommandsSeperator1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents contextCommandsResizePathContent As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents contextCommandsResizePathHeader As System.Windows.Forms.ToolStripMenuItem
     Private contextCommands As System.Windows.Forms.ContextMenuStrip
