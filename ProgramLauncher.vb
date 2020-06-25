@@ -349,111 +349,105 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub ReadConfig(path As String)
-        Dim reader As XmlReader = XmlReader.Create(path)
-        Try
-            reader.Read()
-        Catch ex As XmlException
-            reader.Close()
-            Exit Sub
-        End Try
-        
-        Dim elementAttribute As String
-        If reader.IsStartElement() AndAlso reader.Name = "ProgramLauncher" Then
-            If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ProgramList" Then
-                While reader.IsStartElement
-                    If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Program" Then
-                        Dim tmpListViewItem As New ListViewItem(New String() {"Notepad", "notepad", """{0}"""})
-                        
-                        elementAttribute = reader("name")
-                        If elementAttribute IsNot Nothing Then
-                            tmpListViewItem.Text = elementAttribute
-                        End If
-                        
-                        elementAttribute = reader("path")
-                        If elementAttribute IsNot Nothing Then
-                            tmpListViewItem.SubItems.Item(1).Text = elementAttribute
-                        End If
-                        
-                        elementAttribute = reader("args")
-                        If elementAttribute IsNot Nothing Then
-                            tmpListViewItem.SubItems.Item(2).Text = elementAttribute
-                        End If
-                        
-                        lstPrograms.Items.Add(tmpListViewItem)
-                    End If
-                End While
-            End If
-            If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Settings" Then
-                If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ColumnSettings" Then
+        Using reader As XmlReader = XmlReader.Create(path)
+            Try
+                reader.Read()
+            Catch ex As XmlException
+                Exit Sub
+            End Try
+            
+            Dim elementAttribute As String
+            If reader.IsStartElement() AndAlso reader.Name = "ProgramLauncher" Then
+                If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ProgramList" Then
                     While reader.IsStartElement
-                        If reader.Read AndAlso reader.IsStartElement() Then
-                            If reader.Name = "NameColumn" Then
-                                elementAttribute = reader("index")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadName.DisplayIndex = elementAttribute
-                                End If
-                                
-                                elementAttribute = reader("width")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadName.Width = elementAttribute
-                                End If
-                            ElseIf reader.Name = "PathColumn" Then
-                                elementAttribute = reader("index")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadPath.DisplayIndex = elementAttribute
-                                End If
-                                
-                                elementAttribute = reader("width")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadPath.Width = elementAttribute
-                                End If
-                            ElseIf reader.Name = "ArgColumn" Then
-                                elementAttribute = reader("index")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadProgramArgs.DisplayIndex = elementAttribute
-                                End If
-                                
-                                elementAttribute = reader("width")
-                                If elementAttribute IsNot Nothing Then
-                                    colheadProgramArgs.Width = elementAttribute
-                                End If
+                        If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Program" Then
+                            Dim tmpListViewItem As New ListViewItem(New String() {"Notepad", "notepad", """{0}"""})
+                            
+                            elementAttribute = reader("name")
+                            If elementAttribute IsNot Nothing Then
+                                tmpListViewItem.Text = elementAttribute
                             End If
+                            
+                            elementAttribute = reader("path")
+                            If elementAttribute IsNot Nothing Then
+                                tmpListViewItem.SubItems.Item(1).Text = elementAttribute
+                            End If
+                            
+                            elementAttribute = reader("args")
+                            If elementAttribute IsNot Nothing Then
+                                tmpListViewItem.SubItems.Item(2).Text = elementAttribute
+                            End If
+                            
+                            lstPrograms.Items.Add(tmpListViewItem)
                         End If
                     End While
                 End If
-                If reader.Read AndAlso reader.IsStartElement AndAlso reader.Name = "WindowSize" Then
-                    elementAttribute = reader("width")
-                    If elementAttribute IsNot Nothing Then
-                        If isProgramEditor Then
-                            Me.Width = elementAttribute
-                        Else
-                            Me.Width = elementAttribute - 67
-                        End If
-                        Me.Location = New Drawing.Point(My.Computer.Screen.WorkingArea.Width/2 - Me.Width/2, Me.Location.Y)
+                If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "Settings" Then
+                    If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "ColumnSettings" Then
+                        While reader.IsStartElement
+                            If reader.Read AndAlso reader.IsStartElement() Then
+                                If reader.Name = "NameColumn" Then
+                                    elementAttribute = reader("index")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadName.DisplayIndex = elementAttribute
+                                    End If
+                                    
+                                    elementAttribute = reader("width")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadName.Width = elementAttribute
+                                    End If
+                                ElseIf reader.Name = "PathColumn" Then
+                                    elementAttribute = reader("index")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadPath.DisplayIndex = elementAttribute
+                                    End If
+                                    
+                                    elementAttribute = reader("width")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadPath.Width = elementAttribute
+                                    End If
+                                ElseIf reader.Name = "ArgColumn" Then
+                                    elementAttribute = reader("index")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadProgramArgs.DisplayIndex = elementAttribute
+                                    End If
+                                    
+                                    elementAttribute = reader("width")
+                                    If elementAttribute IsNot Nothing Then
+                                        colheadProgramArgs.Width = elementAttribute
+                                    End If
+                                End If
+                            End If
+                        End While
                     End If
-                    
-                    elementAttribute = reader("height")
-                    If elementAttribute IsNot Nothing Then
-                        If isProgramEditor Then
-                            Me.Height = elementAttribute
-                        Else
-                            Me.Height = elementAttribute + 29
+                    If reader.Read AndAlso reader.IsStartElement AndAlso reader.Name = "WindowSize" Then
+                        elementAttribute = reader("width")
+                        If elementAttribute IsNot Nothing Then
+                            If isProgramEditor Then
+                                Me.Width = elementAttribute
+                            Else
+                                Me.Width = elementAttribute - 67
+                            End If
+                            Me.Location = New Drawing.Point(My.Computer.Screen.WorkingArea.Width / 2 - Me.Width / 2, Me.Location.Y)
                         End If
-                        Me.Location = New Drawing.Point(Me.Location.X, My.Computer.Screen.WorkingArea.Height/2 - Me.Height/2)
+                        
+                        elementAttribute = reader("height")
+                        If elementAttribute IsNot Nothing Then
+                            If isProgramEditor Then
+                                Me.Height = elementAttribute
+                            Else
+                                Me.Height = elementAttribute + 29
+                            End If
+                            Me.Location = New Drawing.Point(Me.Location.X, My.Computer.Screen.WorkingArea.Height / 2 - Me.Height / 2)
+                        End If
                     End If
                 End If
             End If
-        End If
-        
-        reader.Close()
+        End Using
     End Sub
     
     Private Sub WriteConfig(path As String)
-        Dim XMLwSettings As New XmlWriterSettings()
-        XMLwSettings.Indent = True
-        Dim writer As XmlWriter = XmlWriter.Create(path, XMLwSettings)
-        
-        Try
+        Using writer As XmlWriter = XmlWriter.Create(path, New XmlWriterSettings With {.Indent = True})
             writer.WriteStartDocument()
             writer.WriteStartElement("ProgramLauncher")
             
@@ -490,9 +484,7 @@ Public Class ProgramLauncher
             
             writer.WriteEndElement()
             writer.WriteEndDocument()
-        Finally
-            writer.Close
-        End Try
+        End Using
     End Sub
 End Class
 
