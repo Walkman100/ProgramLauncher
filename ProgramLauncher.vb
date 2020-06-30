@@ -329,21 +329,20 @@ Public Class ProgramLauncher
     End Sub
     
     Private Sub LoadInitialList()
-        Dim item1 = New String() {"Open in Explorer", "%WinDir%\explorer.exe", """{0}"""}
-        Dim item2 = New String() {"Show in Explorer", "%WinDir%\explorer.exe", "/select, ""{0}"""}
-        Dim item3 = New String() {"Notepad", "%WinDir%\notepad.exe", """{0}"""}
-        Dim item4 = New String() {"Notepad (Admin)", "elevate %WinDir%\notepad.exe", """{0}"""}
-        Dim item5 = New String() {"Open CMD at path", "%WinDir%\System32\cmd.exe", "/k cd /d ""{0}"""}
-        Dim item6 = New String() {"Copy to Clipboard", "Copy to Clipboard", "{0}"}
-        Dim item7 = New String() {"Microsoft Edge", "microsoft-edge:", "{0}"}
-        Dim item8 = New String() {"BasicBrowser", "%ProgramFiles%\WalkmanOSS\BasicBrowser.exe", """{0}"""}
-        Dim item9 = New String() {"DirectoryImage", "%ProgramFiles%\WalkmanOSS\DirectoryImage.exe", """{0}"""}
-        Dim item10 = New String() {"PropertiesDotNet", "%ProgramFiles%\WalkmanOSS\PropertiesDotNet.exe", """{0}"""}
-        For Each item As String() In {item1, item2, item3, item4, item5, item6, item7, item8, item9, item10}
-            lstPrograms.Items.Add(New ListViewItem(item))
-        Next
+        Dim item1 = New ListViewItem({"Open in Explorer", "%WinDir%\explorer.exe", """{0}"""})
+        Dim item2 = New ListViewItem({"Show in Explorer", "%WinDir%\explorer.exe", "/select, ""{0}"""})
+        Dim item3 = New ListViewItem({"Notepad", "%WinDir%\notepad.exe", """{0}"""})
+        Dim item4 = New ListViewItem({"Notepad (Admin)", "elevate %WinDir%\notepad.exe", """{0}"""})
+        Dim item5 = New ListViewItem({"Open CMD at path", "%WinDir%\System32\cmd.exe", "/k cd /d ""{0}"""})
+        Dim item6 = New ListViewItem({"Copy to Clipboard", "Copy to Clipboard", "{0}"})
+        Dim item7 = New ListViewItem({"Microsoft Edge", "microsoft-edge:", "{0}"})
+        Dim item8 = New ListViewItem({"BasicBrowser", "%ProgramFiles%\WalkmanOSS\BasicBrowser.exe", """{0}"""})
+        Dim item9 = New ListViewItem({"DirectoryImage", "%ProgramFiles%\WalkmanOSS\DirectoryImage.exe", """{0}"""})
+        Dim item10 = New ListViewItem({"PropertiesDotNet", "%ProgramFiles%\WalkmanOSS\PropertiesDotNet.exe", """{0}"""})
+        lstPrograms.Items.AddRange({item1, item2, item3, item4, item5, item6, item7, item8, item9, item10})
         
         'Me.Height = 240 (disabled because the default form size is big enough)
+        'colheadName.Width = 
         'colheadPath.Width = 292
         'colheadProgramArgs.Width = 151
     End Sub
