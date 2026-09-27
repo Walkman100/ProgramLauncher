@@ -87,14 +87,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.IO" />
-    <Import Include="System.Windows.Forms" />
-    <Import Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="WalkmanLib" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

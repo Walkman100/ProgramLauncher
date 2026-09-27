@@ -1,4 +1,10 @@
+Imports System
+Imports System.Diagnostics
+Imports System.IO
 Imports System.Linq
+Imports System.Windows.Forms
+Imports System.Xml
+Imports Microsoft.VisualBasic
 
 Public Class ProgramLauncher
     
@@ -33,6 +39,16 @@ Public Class ProgramLauncher
                 Me.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
         lstPrograms.SetDoubleBuffered(True)
+        
+        If WalkmanLib.GetDarkThemeEnabled() Then
+            Dim theme As WalkmanLib.Theme = WalkmanLib.Theme.Dark
+            
+            WalkmanLib.InitCustomRenderers(Me.Controls)
+            WalkmanLib.SetPreferredAppMode(theme.SystemAppMode)
+            WalkmanLib.ApplyThemeRenderer(theme, Me.Controls)
+            WalkmanLib.ApplyTheme(theme, Me, True)
+            If Me.components IsNot Nothing Then WalkmanLib.ApplyTheme(theme, Me.components.Components, True)
+        End If
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
