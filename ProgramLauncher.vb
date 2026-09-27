@@ -1,5 +1,5 @@
 Imports System.Linq
-Imports System.Runtime.CompilerServices
+
 Public Class ProgramLauncher
     
     Dim isProgramEditor As Boolean
@@ -32,7 +32,7 @@ Public Class ProgramLauncher
                 Me.Text = "[Admin] Select a program to open """ & fullArgument & """ with:" Else _
                 Me.Text = "Select a program to open """ & fullArgument & """ with:"
         End If
-        lstPrograms.DoubleBuffered(True)
+        lstPrograms.SetDoubleBuffered(True)
     End Sub
     
     Private Sub LoadProgramLauncher() Handles Me.Load
@@ -61,7 +61,7 @@ Public Class ProgramLauncher
             LoadInitialList()
         End If
         
-        CheckButtons
+        CheckButtons()
     End Sub
     
     Private Sub AddItem() Handles btnAdd.Click
@@ -486,11 +486,3 @@ Public Class ProgramLauncher
         End Using
     End Sub
 End Class
-
-Module ControlExtensions ' thanks to https://stackoverflow.com/a/15268338/2999220
-    <Extension()>
-    Public Sub DoubleBuffered(control As Control, enable As Boolean)
-        Dim doubleBufferPropertyInfo = control.[GetType]().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.NonPublic)
-        doubleBufferPropertyInfo.SetValue(control, enable, Nothing)
-    End Sub
-End Module
