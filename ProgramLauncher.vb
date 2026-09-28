@@ -4,9 +4,18 @@ Imports System.IO
 Imports System.Linq
 Imports System.Windows.Forms
 Imports System.Xml
-Imports Microsoft.VisualBasic
 
 Public Class ProgramLauncher
+    ReadOnly theme As WalkmanLib.Theme = WalkmanLib.Theme.Default
+    Function MessageBox(text As String, Optional buttons As MessageBoxButtons = 0, Optional icon As MessageBoxIcon = 0, Optional title As String = Nothing) As DialogResult
+        If title Is Nothing Then title = Application.ProductName
+        Return WalkmanLib.CustomMsgBox(text, theme, title, buttons, icon, WinVersionStyle.Win10, Me)
+    End Function
+    Function GetInput(ByRef input As String, Optional header As String = Nothing, Optional windowTitle As String = Nothing, Optional content As String = Nothing) As DialogResult
+        If windowTitle Is Nothing Then windowTitle = Application.ProductName
+        Return WalkmanLib.InputDialog(input, theme, header, windowTitle, content, ownerForm:=Me)
+    End Function
+
     Dim isProgramEditor As Boolean
     Dim configFileName As String = "ProgramLauncher.xml"
     Dim configFilePath As String = ""
@@ -40,7 +49,7 @@ Public Class ProgramLauncher
         lstPrograms.SetDoubleBuffered(True)
 
         If WalkmanLib.GetDarkThemeEnabled() Then
-            Dim theme As WalkmanLib.Theme = WalkmanLib.Theme.Dark
+            theme = WalkmanLib.Theme.Dark
 
             WalkmanLib.InitCustomRenderers(Me.Controls)
             WalkmanLib.SetPreferredAppMode(theme.SystemAppMode)
@@ -124,7 +133,7 @@ Public Class ProgramLauncher
                 btnMoveUp.Enabled = False
             End If
         Catch ex As Exception
-            MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
+            MessageBox("There was an error moving the item: " & ex.Message, icon:=MessageBoxIcon.Exclamation)
         End Try
     End Sub
 
@@ -156,20 +165,22 @@ Public Class ProgramLauncher
                 btnMoveDown.Enabled = False
             End If
         Catch ex As Exception
-            MsgBox("There was an error moving the item: " & ex.Message, MsgBoxStyle.Exclamation)
+            MessageBox("There was an error moving the item: " & ex.Message, icon:=MessageBoxIcon.Exclamation)
         End Try
     End Sub
 
     Private Sub btnEdit_Click() Handles btnEdit.Click
         If isProgramEditor Then
-            Dim inputBoxText As String
+            Dim inputBoxText As String = Nothing
             For Each item As ListViewItem In lstPrograms.SelectedItems
-                inputBoxText = InputBox("Enter the arguments to start """ & item.SubItems.Item(1).Text & """ with:", "", item.SubItems.Item(2).Text)
-                If inputBoxText <> "" Then item.SubItems.Item(2).Text = inputBoxText
+                inputBoxText = item.SubItems.Item(2).Text
+                If GetInput(inputBoxText, "Input Arguments", content:="Enter the arguments to start """ & item.SubItems.Item(1).Text & """ with:") = DialogResult.OK Then
+                    item.SubItems.Item(2).Text = inputBoxText
+                End If
             Next
             WriteConfig(configFilePath)
         Else
-            Shell(Path.Combine(Application.StartupPath, Process.GetCurrentProcess.ProcessName & ".exe"), AppWinStyle.NormalFocus, True, 100000)
+            Microsoft.VisualBasic.Shell(Path.Combine(Application.StartupPath, Process.GetCurrentProcess.ProcessName & ".exe"), Microsoft.VisualBasic.AppWinStyle.NormalFocus, True, 100000)
             lstPrograms.Items.Clear()
             ReadConfig(configFilePath)
         End If
@@ -248,8 +259,8 @@ Public Class ProgramLauncher
                     Process.Start(programPath, programArgs)
                 End If
             Catch ex As Exception
-                MsgBox("There was an error running the program """ & programPath & """ with """ & programArgs & """ args:" &
-                    vbNewLine & ex.Message, MsgBoxStyle.Critical)
+                MessageBox("There was an error running the program """ & programPath & """ with """ & programArgs & """ args:" &
+                    Environment.NewLine & ex.Message, icon:=MessageBoxIcon.Error)
             End Try
         End If
     End Sub
@@ -297,7 +308,7 @@ Public Class ProgramLauncher
 
     Private Sub lstPrograms_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles lstPrograms.ColumnClick
         If e.Column = 0 Then
-            lstPrograms.Sorting = IIf(lstPrograms.Sorting = SortOrder.Ascending, SortOrder.Descending, SortOrder.Ascending)
+            lstPrograms.Sorting = If(lstPrograms.Sorting = SortOrder.Ascending, SortOrder.Descending, SortOrder.Ascending)
         Else
             'lstPrograms.Sort(e.Column)
         End If
