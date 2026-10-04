@@ -346,7 +346,7 @@ Public Class ProgramLauncher
             tmpListViewItem.Focused = True
         ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) AndAlso TypeOf e.Data.GetData(DataFormats.FileDrop) Is String() Then
             lstPrograms.SelectedItems.Clear() ' deselect existing items
-            For Each filePath In DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each filePath As String In DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
                 Dim tmpListViewItem As New ListViewItem(New String() {"", filePath, " "})
                 lstPrograms.Items.Add(tmpListViewItem).Selected = True
                 tmpListViewItem.Focused = True
@@ -477,7 +477,7 @@ Public Class ProgramLauncher
             writer.WriteStartElement("ProgramLauncher")
 
             writer.WriteStartElement("ProgramList")
-            For Each item In lstPrograms.Items
+            For Each item As ListViewItem In lstPrograms.Items
                 writer.WriteStartElement("Program")
                 writer.WriteAttributeString("name", item.Text)
                 writer.WriteAttributeString("path", item.SubItems.Item(1).Text)
